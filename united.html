@@ -1,0 +1,2300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="UNITED HAREWARE TRADING - Industrial hardware supply, parts sorting, fast delivery support." />
+  <title>UNITED HAREWARE TRADING</title>
+
+  <style>
+    :root{
+      --primary:#0d47a1;
+      --primary2:#1f65d6;
+      --primarySoft:#edf4ff;
+      --dark:#0f172a;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --white:#ffffff;
+      --light:#f8fafc;
+      --success:#25d366;
+      --maps:#2563eb;
+      --waze:#06b6d4;
+      --warning:#f59e0b;
+      --shadow-sm:0 6px 16px rgba(0,0,0,.08);
+      --shadow-md:0 14px 32px rgba(0,0,0,.12);
+      --shadow-lg:0 24px 48px rgba(0,0,0,.18);
+      --radius:22px;
+      --radius-sm:14px;
+      --container:1220px;
+      --transition:.28s ease;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:"Segoe UI",Arial,Helvetica,sans-serif;
+      color:var(--text);
+      background:var(--white);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
+
+    img{display:block;max-width:100%}
+    a{text-decoration:none;color:inherit}
+    button,input,select,textarea{font:inherit}
+
+    .container{width:min(92%,var(--container));margin:0 auto}
+    .section{padding:88px 0}
+    .section-sm{padding:56px 0}
+    .bg-light{background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%)}
+
+    .section-head{
+      max-width:860px;
+      margin:0 auto 40px;
+      text-align:center;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(13,71,161,.08);
+      color:var(--primary);
+      font-size:.9rem;
+      font-weight:800;
+      margin-bottom:12px;
+    }
+    .section-title{
+      margin:0 0 12px;
+      font-size:clamp(1.9rem,3vw,3rem);
+      line-height:1.14;
+      color:var(--dark);
+    }
+    .section-desc{
+      margin:0;
+      color:var(--muted);
+      font-size:1.02rem;
+    }
+
+    .topbar{
+      background:#111827;
+      color:#dbeafe;
+      font-size:.92rem;
+    }
+    .topbar-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:10px 0;
+      flex-wrap:wrap;
+    }
+    .topbar-left,.topbar-right{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .topbar-link{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      color:#dbeafe;
+      font-weight:600;
+    }
+
+    .navbar{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(0,0,0,.06);
+    }
+    .nav-inner{
+      min-height:82px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+    .brand-logo{
+      width:58px;
+      height:58px;
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow:var(--shadow-sm);
+      border:1px solid var(--line);
+      flex-shrink:0;
+    }
+    .brand-logo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    .brand-text h1{
+      margin:0;
+      font-size:1.04rem;
+      line-height:1.12;
+      color:var(--primary);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .brand-text p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:.82rem;
+    }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+    .nav-links a{
+      font-weight:700;
+      color:var(--text);
+      position:relative;
+      transition:var(--transition);
+    }
+    .nav-links a:hover{color:var(--primary)}
+    .nav-links a::after{
+      content:"";
+      position:absolute;
+      left:0;bottom:-8px;
+      width:0;height:2px;
+      background:var(--primary);
+      transition:var(--transition);
+    }
+    .nav-links a:hover::after,
+    .nav-links a.active::after{width:100%}
+
+    .nav-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-shrink:0;
+    }
+    .lang-switch{
+      display:flex;
+      border:1px solid var(--line);
+      border-radius:999px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .lang-btn{
+      border:none;
+      background:transparent;
+      padding:9px 14px;
+      font-weight:800;
+      color:var(--muted);
+      cursor:pointer;
+      transition:var(--transition);
+    }
+    .lang-btn.active{
+      background:var(--primary);
+      color:#fff;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:13px 22px;
+      font-weight:800;
+      transition:var(--transition);
+      min-height:48px;
+      text-align:center;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--primary),var(--primary2));
+      box-shadow:var(--shadow-sm);
+    }
+    .btn-outline{
+      color:var(--text);
+      background:#fff;
+      border:1px solid var(--line);
+    }
+    .btn-outline:hover{
+      color:var(--primary);
+      border-color:var(--primary);
+    }
+    .btn-success{
+      color:#fff;
+      background:var(--success);
+      box-shadow:var(--shadow-sm);
+    }
+    .btn-maps{
+      color:#fff;
+      background:var(--maps);
+      box-shadow:var(--shadow-sm);
+    }
+    .btn-waze{
+      color:#fff;
+      background:var(--waze);
+      box-shadow:var(--shadow-sm);
+    }
+
+    .menu-toggle{
+      display:none;
+      width:44px;height:44px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      cursor:pointer;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:4px;
+    }
+    .menu-toggle span{
+      width:20px;height:2px;background:var(--dark);border-radius:999px;
+    }
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      color:#fff;
+      background:
+        linear-gradient(rgba(8,48,107,.84),rgba(13,71,161,.80)),
+        url("https://images.unsplash.com/photo-1581093458791-9d42e0f2f0d8?auto=format&fit=crop&w=1400&q=80") center/cover no-repeat;
+      min-height:calc(100svh - 82px);
+      display:flex;
+      align-items:center;
+    }
+    .hero::before,.hero::after{
+      content:"";
+      position:absolute;
+      border-radius:999px;
+      filter:blur(40px);
+      opacity:.28;
+      pointer-events:none;
+    }
+    .hero::before{
+      width:260px;height:260px;background:#60a5fa;top:-60px;right:-40px;
+    }
+    .hero::after{
+      width:340px;height:340px;background:#fbbf24;bottom:-120px;left:-110px;
+    }
+    .hero-grid{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:34px;
+      align-items:center;
+      padding:74px 0;
+    }
+    .hero-badges,.hero-actions,.hero-stats{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .hero-badges{margin-bottom:18px}
+    .hero-badge{
+      background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.18);
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:.9rem;
+      font-weight:800;
+    }
+    .hero h2{
+      margin:0 0 18px;
+      font-size:clamp(2.5rem,5vw,4.6rem);
+      line-height:1.04;
+      letter-spacing:-.02em;
+    }
+    .hero p{
+      margin:0 0 24px;
+      color:rgba(255,255,255,.93);
+      font-size:clamp(1rem,1.5vw,1.12rem);
+      max-width:720px;
+    }
+    .hero-stats{margin-top:28px}
+    .hero-stat{
+      min-width:150px;
+      background:rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:16px;
+      padding:16px;
+    }
+    .hero-stat strong{
+      display:block;
+      font-size:1.6rem;
+      line-height:1;
+      margin-bottom:6px;
+    }
+
+    .hero-panel{
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:24px;
+      padding:24px;
+      backdrop-filter:blur(12px);
+      box-shadow:var(--shadow-lg);
+    }
+    .hero-panel h3{
+      margin:0 0 16px;
+      font-size:1.24rem;
+    }
+    .hero-panel-grid{
+      display:grid;
+      gap:14px;
+    }
+    .hero-panel-item{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .hero-panel-icon{
+      width:42px;height:42px;
+      border-radius:14px;
+      background:rgba(255,255,255,.14);
+      display:grid;place-items:center;
+      font-size:1.1rem;
+      flex-shrink:0;
+    }
+    .hero-panel-item strong{
+      display:block;
+      margin-bottom:3px;
+    }
+
+    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+    .grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px}
+
+    .card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow-sm);
+      transition:var(--transition);
+      height:100%;
+    }
+    .card:hover{
+      transform:translateY(-5px);
+      box-shadow:var(--shadow-md);
+    }
+
+    .about-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:28px;
+      align-items:stretch;
+    }
+    .about-image{
+      min-height:420px;
+      border-radius:26px;
+      overflow:hidden;
+      background:
+        linear-gradient(rgba(0,0,0,.10),rgba(0,0,0,.18)),
+        url("https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
+      box-shadow:var(--shadow-md);
+    }
+
+    .feature-list{display:grid;gap:14px;margin-top:22px}
+    .feature-item{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      padding:16px;
+      border-radius:14px;
+      background:#f8fbff;
+      border:1px solid #e7eefc;
+    }
+    .feature-icon{
+      width:46px;height:46px;
+      border-radius:14px;
+      background:rgba(13,71,161,.1);
+      color:var(--primary);
+      display:grid;place-items:center;
+      font-weight:900;
+      flex-shrink:0;
+    }
+    .feature-item h4{
+      margin:0 0 5px;
+      font-size:1.04rem;
+    }
+    .feature-item p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .manager-card{
+      background:linear-gradient(135deg,rgba(13,71,161,.05),rgba(31,101,214,.08));
+      border:1px solid rgba(13,71,161,.12);
+      border-radius:24px;
+      padding:28px;
+      box-shadow:var(--shadow-sm);
+      height:100%;
+    }
+    .manager-head{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+    .manager-avatar{
+      width:86px;height:86px;
+      border-radius:50%;
+      overflow:hidden;
+      background:#fff;
+      box-shadow:var(--shadow-sm);
+      border:1px solid var(--line);
+      flex-shrink:0;
+    }
+    .manager-avatar img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    .manager-head h3{
+      margin:0;
+      font-size:1.35rem;
+    }
+    .manager-role{
+      margin:6px 0 0;
+      color:var(--primary);
+      font-weight:800;
+    }
+    .chip-wrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:10px 14px;
+      background:#fff;
+      border:1px solid var(--line);
+      font-weight:700;
+    }
+
+    .service-card-icon{
+      width:60px;height:60px;
+      border-radius:18px;
+      background:rgba(13,71,161,.1);
+      color:var(--primary);
+      display:grid;place-items:center;
+      font-size:1.35rem;
+      margin-bottom:16px;
+    }
+
+    .quick-action-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:18px;
+      margin-top:24px;
+    }
+    .quick-action-card{
+      min-height:150px;
+      color:#fff;
+      border-radius:20px;
+      padding:22px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:var(--shadow-sm);
+      transition:var(--transition);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .quick-action-card:hover{
+      transform:translateY(-4px);
+      box-shadow:var(--shadow-md);
+    }
+    .quick-action-card::after{
+      content:"";
+      position:absolute;
+      right:-20px;
+      top:-20px;
+      width:100px;height:100px;
+      border-radius:50%;
+      background:rgba(255,255,255,.12);
+    }
+    .quick-whatsapp{background:linear-gradient(135deg,#1db954,#25d366)}
+    .quick-maps{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
+    .quick-waze{background:linear-gradient(135deg,#06b6d4,#0891b2)}
+    .quick-top{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      position:relative;
+      z-index:1;
+    }
+    .quick-top-icon{
+      width:44px;height:44px;
+      border-radius:14px;
+      display:grid;place-items:center;
+      background:rgba(255,255,255,.16);
+      font-size:1.2rem;
+      flex-shrink:0;
+    }
+    .quick-title{
+      font-size:1.08rem;
+      font-weight:800;
+    }
+    .quick-desc{
+      position:relative;
+      z-index:1;
+      color:rgba(255,255,255,.93);
+      font-size:.95rem;
+      margin-top:12px;
+    }
+    .quick-action{
+      position:relative;
+      z-index:1;
+      margin-top:18px;
+      font-weight:800;
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns:1.15fr .9fr;
+      gap:16px;
+      margin-bottom:16px;
+    }
+    .control input,.control select{
+      width:100%;
+      min-height:52px;
+      padding:14px 16px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fff;
+      outline:none;
+      transition:var(--transition);
+    }
+    .control input:focus,.control select:focus{
+      border-color:var(--primary);
+      box-shadow:0 0 0 4px rgba(13,71,161,.08);
+    }
+
+    .products-topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .product-meta-text{
+      color:var(--muted);
+      font-weight:700;
+    }
+
+    .products-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:22px;
+    }
+    .product-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:var(--shadow-sm);
+      transition:var(--transition);
+      display:flex;
+      flex-direction:column;
+      min-height:100%;
+    }
+    .product-card:hover{
+      transform:translateY(-6px) scale(1.01);
+      box-shadow:var(--shadow-md);
+    }
+    .product-img-wrap{
+      aspect-ratio:4/3;
+      overflow:hidden;
+      background:linear-gradient(180deg,#eef5ff 0%,#f8fbff 100%);
+      border-bottom:1px solid var(--line);
+    }
+    .product-img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transition:transform .4s ease;
+    }
+    .product-card:hover .product-img{transform:scale(1.05)}
+    .product-body{
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      flex:1;
+    }
+    .product-category{
+      display:inline-flex;
+      align-items:center;
+      padding:7px 12px;
+      border-radius:999px;
+      background:rgba(13,71,161,.08);
+      color:var(--primary);
+      font-size:.82rem;
+      font-weight:800;
+      width:max-content;
+    }
+    .product-title{
+      margin:0;
+      font-size:1.05rem;
+      line-height:1.35;
+      color:var(--dark);
+    }
+    .product-desc{
+      margin:0;
+      color:var(--muted);
+      font-size:.95rem;
+      flex:1;
+    }
+    .product-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:auto;
+    }
+
+    .product-more-wrap{
+      margin-top:28px;
+      text-align:center;
+    }
+
+    .empty-state{
+      display:none;
+      text-align:center;
+      padding:36px;
+      border:1px dashed var(--line);
+      border-radius:18px;
+      color:var(--muted);
+      background:#fff;
+      margin-top:20px;
+    }
+
+    .contact-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:26px;
+      align-items:stretch;
+    }
+    .contact-card,.map-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:26px;
+      box-shadow:var(--shadow-sm);
+      height:100%;
+    }
+    .contact-list{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+    .contact-item{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      padding:14px 0;
+      border-bottom:1px solid #eef2f7;
+    }
+    .contact-item:last-child{border-bottom:none}
+    .contact-icon{
+      width:44px;height:44px;
+      border-radius:14px;
+      background:rgba(13,71,161,.1);
+      color:var(--primary);
+      display:grid;place-items:center;
+      flex-shrink:0;
+      font-size:1.12rem;
+    }
+    .contact-item strong{
+      display:block;
+      margin-bottom:4px;
+    }
+    .contact-item span,.contact-item a{
+      color:var(--muted);
+      word-break:break-word;
+    }
+
+    .contact-action-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .info-box{
+      margin-top:20px;
+      padding:18px;
+      border-radius:18px;
+      background:#f8fbff;
+      border:1px solid #e7eefc;
+    }
+    .info-box h4{
+      margin:0 0 10px;
+    }
+    .info-box p{
+      margin:0;
+      color:var(--muted);
+    }
+
+    .map-frame{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      min-height:360px;
+      background:#f1f5f9;
+    }
+    .map-frame iframe{
+      width:100%;
+      min-height:360px;
+      border:0;
+    }
+
+    .footer{
+      background:linear-gradient(180deg,#0f172a 0%,#111827 100%);
+      color:#dbeafe;
+      padding:70px 0 28px;
+      margin-top:24px;
+    }
+    .footer-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr .8fr 1fr;
+      gap:24px;
+      margin-bottom:26px;
+    }
+    .footer h3,.footer h4{
+      margin-top:0;
+      color:#fff;
+    }
+    .footer p,.footer li,.footer a{
+      color:#cbd5e1;
+    }
+    .footer ul{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:grid;
+      gap:10px;
+    }
+    .footer-bottom{
+      padding-top:20px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      color:#94a3b8;
+      font-size:.94rem;
+    }
+
+    .floating-whatsapp{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:1200;
+      width:62px;height:62px;
+      border-radius:50%;
+      display:grid;place-items:center;
+      background:var(--success);
+      color:#fff;
+      box-shadow:var(--shadow-lg);
+      transition:var(--transition);
+      font-size:1.5rem;
+    }
+    .floating-whatsapp:hover{
+      transform:translateY(-4px) scale(1.04);
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:2000;
+      padding:20px;
+    }
+    .modal.show{display:flex}
+    .modal-content{
+      width:min(980px,100%);
+      background:#fff;
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:var(--shadow-lg);
+      max-height:92vh;
+      overflow-y:auto;
+      position:relative;
+    }
+    .modal-close{
+      position:absolute;
+      top:14px;right:14px;
+      width:44px;height:44px;
+      border:none;
+      border-radius:50%;
+      background:rgba(255,255,255,.92);
+      box-shadow:var(--shadow-sm);
+      cursor:pointer;
+      font-size:1.2rem;
+      z-index:2;
+    }
+    .modal-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      min-height:100%;
+    }
+    .modal-image-wrap{
+      background:linear-gradient(180deg,#eef5ff 0%,#f8fbff 100%);
+      min-height:320px;
+    }
+    .modal-image{
+      width:100%;
+      height:100%;
+      min-height:320px;
+      object-fit:cover;
+    }
+    .modal-body{padding:32px}
+    .modal-category{
+      display:inline-block;
+      background:rgba(13,71,161,.08);
+      color:var(--primary);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:.85rem;
+      font-weight:800;
+      margin-bottom:12px;
+    }
+    .modal-body h3{
+      margin:0 0 12px;
+      font-size:1.8rem;
+      line-height:1.2;
+      color:var(--dark);
+    }
+    .modal-body p{
+      margin:0 0 14px;
+      color:var(--muted);
+    }
+    .modal-specs{
+      display:grid;
+      gap:12px;
+      margin:18px 0;
+    }
+    .modal-spec{
+      padding:14px;
+      border-radius:14px;
+      background:#f8fbff;
+      border:1px solid #e7eefc;
+    }
+    .modal-spec strong{
+      display:block;
+      margin-bottom:4px;
+      color:var(--dark);
+    }
+    .modal-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    [data-reveal]{
+      opacity:0;
+      transform:translateY(24px);
+      transition:.7s ease;
+    }
+    [data-reveal].revealed{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    @media (max-width:1199px){
+      .hero-grid,.about-grid,.contact-grid,.modal-grid{
+        grid-template-columns:1fr;
+      }
+      .products-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+      .grid-4,.quick-action-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .footer-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:991px){
+      .nav-links{
+        position:fixed;
+        top:82px;
+        left:0;right:0;
+        background:#fff;
+        border-bottom:1px solid var(--line);
+        box-shadow:var(--shadow-md);
+        padding:18px 4%;
+        display:none;
+        flex-direction:column;
+        align-items:flex-start;
+        gap:14px;
+      }
+      .nav-links.show{display:flex}
+      .menu-toggle{display:inline-flex}
+      .nav-actions .btn-primary{display:none}
+      .products-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .controls{grid-template-columns:1fr}
+      .quick-action-grid{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr}
+    }
+
+    @media (max-width:767px){
+      .section{padding:72px 0}
+      .hero{min-height:auto}
+      .hero-grid{padding:56px 0}
+      .topbar-inner,.topbar-left,.topbar-right,.hero-actions,.hero-stats,.product-actions,.footer-bottom,.contact-action-row{
+        flex-direction:column;
+        align-items:stretch;
+      }
+      .grid-2,.grid-4,.footer-grid,.products-grid{
+        grid-template-columns:1fr;
+      }
+      .btn{width:100%}
+      .lang-switch{width:100%}
+      .lang-btn{flex:1}
+      .modal-body{padding:22px}
+      .modal-content{border-radius:18px}
+      .modal-image{min-height:240px}
+      .map-frame iframe{min-height:280px}
+      .chip-wrap{flex-direction:column}
+    }
+
+    @media (max-width:479px){
+      .container{width:min(94%,var(--container))}
+      .brand-text h1{font-size:.94rem}
+      .brand-text p{font-size:.78rem}
+      .manager-avatar{width:74px;height:74px}
+      .floating-whatsapp{
+        right:14px;bottom:14px;
+        width:56px;height:56px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <div class="topbar-left">
+        <a href="tel:+60189029391" class="topbar-link">📞 0189029391</a>
+        <a href="mailto:united.hardware.trading@gmail.com" class="topbar-link">✉ united.hardware.trading@gmail.com</a>
+      </div>
+      <div class="topbar-right">
+        <span data-i18n="topbarText">Industrial Hardware Supply • Parts Sorting • Fast Delivery</span>
+      </div>
+    </div>
+  </div>
+
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#home" class="brand">
+        <div class="brand-logo">
+          <img src="logo.jpeg" alt="UNITED HARDWARE TRADING logo">
+        </div>
+        <div class="brand-text">
+          <h1>UNITED HARDWARE TRADING</h1>
+          <p data-i18n="brandSubtitle">Professional Industrial Hardware Supplier</p>
+        </div>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" class="active" data-nav="home">Home</a>
+        <a href="#about" data-nav="about">About</a>
+        <a href="#services" data-nav="services">Services</a>
+        <a href="#products" data-nav="products">Products</a>
+        <a href="#contact" data-nav="contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="lang-switch">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="zh">中文</button>
+        </div>
+
+        <a
+          href="https://wa.me/60189029391?text=Hello%2C%20I%20would%20like%20to%20request%20a%20quotation."
+          class="btn btn-primary"
+          target="_blank"
+          rel="noopener"
+        >
+          <span>💬</span>
+          <span data-i18n="navQuoteBtn">Get Quote</span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="container hero-grid">
+      <div data-reveal>
+        <div class="hero-badges">
+          <span class="hero-badge" data-i18n="heroBadge1">Established 2023</span>
+          <span class="hero-badge" data-i18n="heroBadge2">100+ Hardware Products</span>
+          <span class="hero-badge" data-i18n="heroBadge3">Fast Delivery Support</span>
+        </div>
+
+        <h2 data-i18n="heroTitle">Reliable Industrial Hardware Supply With Fast Delivery Support</h2>
+        <p data-i18n="heroDesc">
+          UNITED HAREWARE TRADING provides industrial hardware products, parts sorting services,
+          quotation support, and fast customer communication through WhatsApp, email, Google Maps,
+          and Waze navigation.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#products" class="btn btn-primary">
+            <span>🧰</span>
+            <span data-i18n="heroBtn1">View Products</span>
+          </a>
+
+          <a
+            href="https://wa.me/60189029391?text=Hello%2C%20I%20would%20like%20to%20request%20a%20quotation."
+            class="btn btn-success"
+            target="_blank"
+            rel="noopener"
+          >
+            <span>💬</span>
+            <span data-i18n="heroBtn2">Request Quotation</span>
+          </a>
+
+          <a href="#contact" class="btn btn-outline">
+            <span>📍</span>
+            <span data-i18n="heroBtn3">Contact Us</span>
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <strong>100+</strong>
+            <span data-i18n="heroStat1">Product Types</span>
+          </div>
+          <div class="hero-stat">
+            <strong>2023</strong>
+            <span data-i18n="heroStat2">Established</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Fast</strong>
+            <span data-i18n="heroStat3">Delivery Service</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-panel" data-reveal>
+        <h3 data-i18n="heroPanelTitle">What We Provide</h3>
+        <div class="hero-panel-grid">
+          <div class="hero-panel-item">
+            <div class="hero-panel-icon">🧰</div>
+            <div>
+              <strong data-i18n="heroPanel1Title">Industrial Hardware Supply</strong>
+              <span data-i18n="heroPanel1Desc">A wide range of hardware products for industrial and general use.</span>
+            </div>
+          </div>
+
+          <div class="hero-panel-item">
+            <div class="hero-panel-icon">🗂</div>
+            <div>
+              <strong data-i18n="heroPanel2Title">Parts Sorting</strong>
+              <span data-i18n="heroPanel2Desc">Practical support for sorting and handling components more efficiently.</span>
+            </div>
+          </div>
+
+          <div class="hero-panel-item">
+            <div class="hero-panel-icon">🚚</div>
+            <div>
+              <strong data-i18n="heroPanel3Title">Fast Delivery</strong>
+              <span data-i18n="heroPanel3Desc">Support for quicker product delivery arrangements when needed.</span>
+            </div>
+          </div>
+
+          <div class="hero-panel-item">
+            <div class="hero-panel-icon">📲</div>
+            <div>
+              <strong data-i18n="heroPanel4Title">Easy Contact</strong>
+              <span data-i18n="heroPanel4Desc">WhatsApp, email, Google Maps, and Waze for faster access.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-light" id="about">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow" data-i18n="aboutEyebrow">About Us</span>
+        <h2 class="section-title" data-i18n="aboutTitle">Industrial Hardware Supply And Practical Customer Support</h2>
+        <p class="section-desc" data-i18n="aboutDesc">
+          UNITED HAREWARE TRADING is a hardware supply company established in 2023, providing industrial hardware products, parts sorting services, and fast delivery support.
+        </p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-image" data-reveal aria-label="Company image"></div>
+
+        <div class="card" data-reveal>
+          <h3 data-i18n="aboutCardTitle">Company Overview</h3>
+          <p data-i18n="aboutText1">We specialize in the supply of industrial hardware products such as screws, bolts, nuts, washers, inserts, bearings, drill bits, screwdrivers, and wrenches.</p>
+          <p data-i18n="aboutText2">Besides product supply, we also provide parts sorting support and fast delivery service to help customers improve efficiency and receive products more conveniently.</p>
+          <p data-i18n="aboutText3">Our website is designed to help customers explore products easily, understand our services, and contact us quickly through WhatsApp, email, Google Maps, and Waze.</p>
+
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-icon">📦</div>
+              <div>
+                <h4 data-i18n="aboutFeature1Title">Wide Product Range</h4>
+                <p data-i18n="aboutFeature1Desc">Industrial hardware products for different applications and customer needs.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🗂</div>
+              <div>
+                <h4 data-i18n="aboutFeature2Title">Parts Sorting Service</h4>
+                <p data-i18n="aboutFeature2Desc">Support for organizing and handling small parts more efficiently.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🚚</div>
+              <div>
+                <h4 data-i18n="aboutFeature3Title">Fast Delivery Support</h4>
+                <p data-i18n="aboutFeature3Desc">Practical delivery arrangements to support urgent customer requirements.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-sm"></div>
+
+      <div class="grid-2">
+        <div class="card" data-reveal>
+          <h3 data-i18n="objectiveTitle">Our Business Objectives</h3>
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-icon">✓</div>
+              <div>
+                <h4 data-i18n="objective1Title">Build Customer Trust</h4>
+                <p data-i18n="objective1Desc">Present a professional company image through a clear and reliable website.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">✓</div>
+              <div>
+                <h4 data-i18n="objective2Title">Display Products Clearly</h4>
+                <p data-i18n="objective2Desc">Organize hardware products with better structure, search, and category filters.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">✓</div>
+              <div>
+                <h4 data-i18n="objective3Title">Provide Easy Contact</h4>
+                <p data-i18n="objective3Desc">Allow customers to contact us directly through WhatsApp, email, and phone.</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">✓</div>
+              <div>
+                <h4 data-i18n="objective4Title">Improve Customer Access</h4>
+                <p data-i18n="objective4Desc">Make navigation easier through Google Maps and Waze support.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="manager-card" data-reveal>
+          <div class="manager-head">
+            <div class="manager-avatar">
+              <img src="logo.png" alt="Company logo">
+            </div>
+            <div>
+              <h3 data-i18n="managerName">William Yong</h3>
+              <p class="manager-role" data-i18n="managerRole">General Manager</p>
+            </div>
+          </div>
+
+          <p data-i18n="managerDesc1">William Yong is the main person in charge of customer enquiries, quotation support, and business communication.</p>
+          <p data-i18n="managerDesc2">Customers can contact him directly for hardware product enquiries, quotation requests, delivery arrangements, and service support.</p>
+
+          <div class="chip-wrap">
+            <span class="chip">📞 0189029391</span>
+            <span class="chip">✉ united.hardware.trading@gmail.com</span>
+            <span class="chip" data-i18n="managerChip">Direct Business Contact</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow" data-i18n="servicesEyebrow">Our Services</span>
+        <h2 class="section-title" data-i18n="servicesTitle">Products, Sorting Support, Fast Delivery, And Direct Enquiry</h2>
+        <p class="section-desc" data-i18n="servicesDesc">
+          We focus on practical service support so customers can get information, quotation, and delivery assistance more quickly.
+        </p>
+      </div>
+
+      <div class="grid-4">
+        <div class="card" data-reveal>
+          <div class="service-card-icon">🧰</div>
+          <h3 data-i18n="service1Title">Hardware Supply</h3>
+          <p data-i18n="service1Desc">A wide range of industrial hardware products including screws, bolts, nuts, washers, bearings, inserts, drill bits, and tools.</p>
+        </div>
+
+        <div class="card" data-reveal>
+          <div class="service-card-icon">🗂</div>
+          <h3 data-i18n="service2Title">Parts Sorting</h3>
+          <p data-i18n="service2Desc">Support for sorting, organizing, and handling small parts to improve working efficiency.</p>
+        </div>
+
+        <div class="card" data-reveal>
+          <div class="service-card-icon">🚚</div>
+          <h3 data-i18n="service3Title">Fast Delivery</h3>
+          <p data-i18n="service3Desc">Quick delivery support to help customers receive hardware products more conveniently.</p>
+        </div>
+
+        <div class="card" data-reveal>
+          <div class="service-card-icon">💬</div>
+          <h3 data-i18n="service4Title">Quotation Support</h3>
+          <p data-i18n="service4Desc">Customers can request quotations directly through WhatsApp or email for faster response.</p>
+        </div>
+      </div>
+
+      <div class="quick-action-grid" data-reveal>
+        <a class="quick-action-card quick-whatsapp" href="https://wa.me/60189029391?text=Hello%2C%20I%20would%20like%20to%20ask%20about%20your%20hardware%20products." target="_blank" rel="noopener">
+          <div>
+            <div class="quick-top">
+              <div class="quick-top-icon">💬</div>
+              <div class="quick-title" data-i18n="quickWhatsAppTitle">WhatsApp Us</div>
+            </div>
+            <div class="quick-desc" data-i18n="quickWhatsAppDesc">Fast enquiry and quotation support through direct WhatsApp contact.</div>
+          </div>
+          <div class="quick-action" data-i18n="quickWhatsAppAction">Open WhatsApp</div>
+        </a>
+
+        <a class="quick-action-card quick-maps" href="https://www.google.com/maps/search/united+hardware+trading+malaysia" target="_blank" rel="noopener">
+          <div>
+            <div class="quick-top">
+              <div class="quick-top-icon">🗺</div>
+              <div class="quick-title" data-i18n="quickMapsTitle">Google Maps</div>
+            </div>
+            <div class="quick-desc" data-i18n="quickMapsDesc">Open navigation with Google Maps for easier route planning.</div>
+          </div>
+          <div class="quick-action" data-i18n="quickMapsAction">Open Maps</div>
+        </a>
+
+        <a class="quick-action-card quick-waze" href="https://waze.com/ul" target="_blank" rel="noopener">
+          <div>
+            <div class="quick-top">
+              <div class="quick-top-icon">📍</div>
+              <div class="quick-title" data-i18n="quickWazeTitle">Waze</div>
+            </div>
+            <div class="quick-desc" data-i18n="quickWazeDesc">Use Waze for practical driving navigation and route guidance.</div>
+          </div>
+          <div class="quick-action" data-i18n="quickWazeAction">Open Waze</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-light" id="products">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow" data-i18n="productsEyebrow">Product Catalog</span>
+        <h2 class="section-title" data-i18n="productsTitle">Explore Our Hardware Products</h2>
+        <p class="section-desc" data-i18n="productsDesc">
+          Browse hardware products by keyword and category. Featured products are shown first, and more products can be expanded below.
+        </p>
+      </div>
+
+      <div class="controls" data-reveal>
+        <div class="control">
+          <input type="text" id="searchInput" placeholder="Search products..." data-i18n-placeholder="searchPlaceholder" aria-label="Search products" />
+        </div>
+        <div class="control">
+          <select id="categoryFilter" aria-label="Category filter">
+            <option value="all">All Categories</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="products-topbar" data-reveal>
+        <div class="product-meta-text" id="productMetaText">Showing featured products</div>
+      </div>
+
+      <div class="products-grid" id="productsGrid"></div>
+
+      <div class="empty-state" id="emptyState">
+        <h3 data-i18n="emptyTitle">No products found</h3>
+        <p data-i18n="emptyDesc">Please try another keyword or choose another filter.</p>
+      </div>
+
+      <div class="product-more-wrap" data-reveal>
+        <button class="btn btn-outline" id="toggleMoreBtn">
+          <span>＋</span>
+          <span data-i18n="moreBtn">More Products</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow" data-i18n="contactEyebrow">Contact Us</span>
+        <h2 class="section-title" data-i18n="contactTitle">Get In Touch For Product Enquiry, Quotation, And Delivery Support</h2>
+        <p class="section-desc" data-i18n="contactDesc">
+          Contact us directly through WhatsApp, phone, email, Google Maps, and Waze.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-card" data-reveal>
+          <h3 data-i18n="contactCardTitle">Company Information</h3>
+
+          <div class="contact-list">
+            <div class="contact-item">
+              <div class="contact-icon">🏢</div>
+              <div>
+                <strong data-i18n="contactCompanyLabel">Company</strong>
+                <span>UNITED HAREWARE TRADING</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">👤</div>
+              <div>
+                <strong data-i18n="contactPersonLabel">Person in Charge</strong>
+                <span>William Yong — General Manager</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">📞</div>
+              <div>
+                <strong data-i18n="contactPhoneLabel">Phone / WhatsApp</strong>
+                <a href="tel:+60189029391">0189029391</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">✉</div>
+              <div>
+                <strong data-i18n="contactEmailLabel">Email</strong>
+                <a href="mailto:united.hardware.trading@gmail.com">united.hardware.trading@gmail.com</a>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">🕒</div>
+              <div>
+                <strong data-i18n="contactHoursLabel">Business Hours</strong>
+                <span data-i18n="contactHoursText">Monday – Saturday | 8:00 AM – 8:00 PM</span>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">📍</div>
+              <div>
+                <strong data-i18n="contactLocationLabel">Location</strong>
+                <span data-i18n="contactLocationText">Please update with your full company address if needed.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-action-row">
+            <a href="https://wa.me/60189029391?text=Hello%2C%20I%20would%20like%20to%20ask%20about%20your%20hardware%20products." target="_blank" rel="noopener" class="btn btn-success">
+              <span>💬</span>
+              <span data-i18n="contactBtn1">WhatsApp Us</span>
+            </a>
+
+            <a href="mailto:united.hardware.trading@gmail.com?subject=Hardware%20Product%20Enquiry" class="btn btn-primary">
+              <span>✉</span>
+              <span data-i18n="contactBtn2">Send Email</span>
+            </a>
+
+            <a href="https://www.google.com/maps/search/united+hardware+trading+malaysia" target="_blank" rel="noopener" class="btn btn-maps">
+              <span>🗺</span>
+              <span data-i18n="contactBtn3">Google Maps</span>
+            </a>
+
+            <a href="https://waze.com/ul" target="_blank" rel="noopener" class="btn btn-waze">
+              <span>📍</span>
+              <span data-i18n="contactBtn4">Waze</span>
+            </a>
+          </div>
+
+          <div class="info-box">
+            <h4 data-i18n="quoteBoxTitle">Quotation & Delivery</h4>
+            <p data-i18n="quoteBoxDesc">Customers can request product quotations and discuss delivery arrangements directly through WhatsApp or email for faster communication.</p>
+          </div>
+        </div>
+
+        <div class="map-card" data-reveal>
+          <h3 data-i18n="mapTitle">Location & Navigation</h3>
+          <div class="map-frame">
+            <iframe
+              title="Google Map"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Malaysia&z=6&output=embed">
+            </iframe>
+          </div>
+
+          <div class="info-box">
+            <h4 data-i18n="mapNoteTitle">Navigation Note</h4>
+            <p data-i18n="mapNoteDesc">You can replace the destination with your exact company address later for more accurate navigation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>UNITED HAREWARE TRADING</h3>
+          <p data-i18n="footerDesc">A professional industrial hardware supplier website focused on product visibility, direct communication, parts sorting support, and fast delivery service.</p>
+        </div>
+
+        <div>
+          <h4 data-i18n="footerLinksTitle">Quick Links</h4>
+          <ul>
+            <li><a href="#home" data-i18n="footerLink1">Home</a></li>
+            <li><a href="#about" data-i18n="footerLink2">About</a></li>
+            <li><a href="#services" data-i18n="footerLink3">Services</a></li>
+            <li><a href="#products" data-i18n="footerLink4">Products</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 data-i18n="footerServicesTitle">Categories</h4>
+          <ul>
+            <li data-i18n="footerCat1">Screws</li>
+            <li data-i18n="footerCat2">Bolts</li>
+            <li data-i18n="footerCat3">Washers</li>
+            <li data-i18n="footerCat4">Inserts</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 data-i18n="footerContactTitle">Contact</h4>
+          <ul>
+            <li>William Yong</li>
+            <li>0189029391</li>
+            <li>united.hardware.trading@gmail.com</li>
+            <li data-i18n="footerHours">Mon – Sat, 9:00 AM – 6:00 PM</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span data-i18n="footerCopy">© 2026 UNITED HAREWARE TRADING. All rights reserved.</span>
+        <span data-i18n="footerNote">Industrial Hardware Supply • Fast Delivery • Responsive Website</span>
+      </div>
+    </div>
+  </footer>
+
+  <a
+    class="floating-whatsapp"
+    href="https://wa.me/60189029391?text=Hello%2C%20I%20would%20like%20to%20ask%20about%20your%20hardware%20products."
+    target="_blank"
+    rel="noopener"
+    title="WhatsApp"
+    aria-label="WhatsApp"
+  >💬</a>
+
+  <div class="modal" id="productModal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalProductTitle">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      <div class="modal-grid">
+        <div class="modal-image-wrap">
+          <img id="modalImage" class="modal-image" src="" alt="Product image">
+        </div>
+        <div class="modal-body">
+          <span class="modal-category" id="modalCategory">Category</span>
+          <h3 id="modalProductTitle">Product Name</h3>
+          <p id="modalDescription">Description</p>
+
+          <div class="modal-specs">
+            <div class="modal-spec">
+              <strong data-i18n="modalSpec1Label">Application</strong>
+              <span id="modalApplication">-</span>
+            </div>
+            <div class="modal-spec">
+              <strong data-i18n="modalSpec2Label">Material / Type</strong>
+              <span id="modalMaterial">-</span>
+            </div>
+            <div class="modal-spec">
+              <strong data-i18n="modalSpec3Label">Service Note</strong>
+              <span id="modalServiceNote">Quotation, availability, and delivery arrangements can be discussed directly with our team.</span>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <a id="modalWhatsappBtn" href="#" class="btn btn-success" target="_blank" rel="noopener">
+              <span>💬</span>
+              <span data-i18n="requestQuotation">Request Quotation</span>
+            </a>
+            <a id="modalEmailBtn" href="#" class="btn btn-primary">
+              <span>✉</span>
+              <span data-i18n="modalEmailButton">Email Enquiry</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentLang = "en";
+    let expandedProducts = false;
+    const featuredCount = 8;
+
+    const translations = {
+      en: {
+        topbarText: "Industrial Hardware Supply • Parts Sorting • Fast Delivery",
+        brandSubtitle: "Professional Industrial Hardware Supplier",
+        navQuoteBtn: "Get Quote",
+
+        heroBadge1: "Established 2023",
+        heroBadge2: "100+ Hardware Products",
+        heroBadge3: "Fast Delivery Support",
+        heroTitle: "Reliable Industrial Hardware Supply With Fast Delivery Support",
+        heroDesc: "UNITED HAREWARE TRADING provides industrial hardware products, parts sorting services, quotation support, and fast customer communication through WhatsApp, email, Google Maps, and Waze navigation.",
+        heroBtn1: "View Products",
+        heroBtn2: "Request Quotation",
+        heroBtn3: "Contact Us",
+        heroStat1: "Product Types",
+        heroStat2: "Established",
+        heroStat3: "Delivery Service",
+        heroPanelTitle: "What We Provide",
+        heroPanel1Title: "Industrial Hardware Supply",
+        heroPanel1Desc: "A wide range of hardware products for industrial and general use.",
+        heroPanel2Title: "Parts Sorting",
+        heroPanel2Desc: "Practical support for sorting and handling components more efficiently.",
+        heroPanel3Title: "Fast Delivery",
+        heroPanel3Desc: "Support for quicker product delivery arrangements when needed.",
+        heroPanel4Title: "Easy Contact",
+        heroPanel4Desc: "WhatsApp, email, Google Maps, and Waze for faster access.",
+
+        aboutEyebrow: "About Us",
+        aboutTitle: "Industrial Hardware Supply And Practical Customer Support",
+        aboutDesc: "UNITED HAREWARE TRADING is a hardware supply company established in 2023, providing industrial hardware products, parts sorting services, and fast delivery support.",
+        aboutCardTitle: "Company Overview",
+        aboutText1: "We specialize in the supply of industrial hardware products such as screws, bolts, nuts, washers, inserts, bearings, drill bits, screwdrivers, and wrenches.",
+        aboutText2: "Besides product supply, we also provide parts sorting support and fast delivery service to help customers improve efficiency and receive products more conveniently.",
+        aboutText3: "Our website is designed to help customers explore products easily, understand our services, and contact us quickly through WhatsApp, email, Google Maps, and Waze.",
+        aboutFeature1Title: "Wide Product Range",
+        aboutFeature1Desc: "Industrial hardware products for different applications and customer needs.",
+        aboutFeature2Title: "Parts Sorting Service",
+        aboutFeature2Desc: "Support for organizing and handling small parts more efficiently.",
+        aboutFeature3Title: "Fast Delivery Support",
+        aboutFeature3Desc: "Practical delivery arrangements to support urgent customer requirements.",
+
+        objectiveTitle: "Our Business Objectives",
+        objective1Title: "Build Customer Trust",
+        objective1Desc: "Present a professional company image through a clear and reliable website.",
+        objective2Title: "Display Products Clearly",
+        objective2Desc: "Organize hardware products with better structure, search, and category filters.",
+        objective3Title: "Provide Easy Contact",
+        objective3Desc: "Allow customers to contact us directly through WhatsApp, email, and phone.",
+        objective4Title: "Improve Customer Access",
+        objective4Desc: "Make navigation easier through Google Maps and Waze support.",
+
+        managerName: "William Yong",
+        managerRole: "General Manager",
+        managerDesc1: "William Yong is the main person in charge of customer enquiries, quotation support, and business communication.",
+        managerDesc2: "Customers can contact him directly for hardware product enquiries, quotation requests, delivery arrangements, and service support.",
+        managerChip: "Direct Business Contact",
+
+        servicesEyebrow: "Our Services",
+        servicesTitle: "Products, Sorting Support, Fast Delivery, And Direct Enquiry",
+        servicesDesc: "We focus on practical service support so customers can get information, quotation, and delivery assistance more quickly.",
+        service1Title: "Hardware Supply",
+        service1Desc: "A wide range of industrial hardware products including screws, bolts, nuts, washers, bearings, inserts, drill bits, and tools.",
+        service2Title: "Parts Sorting",
+        service2Desc: "Support for sorting, organizing, and handling small parts to improve working efficiency.",
+        service3Title: "Fast Delivery",
+        service3Desc: "Quick delivery support to help customers receive hardware products more conveniently.",
+        service4Title: "Quotation Support",
+        service4Desc: "Customers can request quotations directly through WhatsApp or email for faster response.",
+
+        quickWhatsAppTitle: "WhatsApp Us",
+        quickWhatsAppDesc: "Fast enquiry and quotation support through direct WhatsApp contact.",
+        quickWhatsAppAction: "Open WhatsApp",
+        quickMapsTitle: "Google Maps",
+        quickMapsDesc: "Open navigation with Google Maps for easier route planning.",
+        quickMapsAction: "Open Maps",
+        quickWazeTitle: "Waze",
+        quickWazeDesc: "Use Waze for practical driving navigation and route guidance.",
+        quickWazeAction: "Open Waze",
+
+        productsEyebrow: "Product Catalog",
+        productsTitle: "Explore Our Hardware Products",
+        productsDesc: "Browse hardware products by keyword and category. Featured products are shown first, and more products can be expanded below.",
+        productMetaFeatured: "Showing featured products",
+        productMetaAll: "Showing all products",
+        productMetaFiltered: "Showing filtered results",
+        moreBtn: "More Products",
+        lessBtn: "Show Less",
+
+        contactEyebrow: "Contact Us",
+        contactTitle: "Get In Touch For Product Enquiry, Quotation, And Delivery Support",
+        contactDesc: "Contact us directly through WhatsApp, phone, email, Google Maps, and Waze.",
+        contactCardTitle: "Company Information",
+        contactCompanyLabel: "Company",
+        contactPersonLabel: "Person in Charge",
+        contactPhoneLabel: "Phone / WhatsApp",
+        contactEmailLabel: "Email",
+        contactHoursLabel: "Business Hours",
+        contactHoursText: "Monday – Saturday | 8:00 AM – 8:00 PM",
+        contactLocationLabel: "Location",
+        contactLocationText: "Please update with your full company address if needed.",
+        contactBtn1: "WhatsApp Us",
+        contactBtn2: "Send Email",
+        contactBtn3: "Google Maps",
+        contactBtn4: "Waze",
+        quoteBoxTitle: "Quotation & Delivery",
+        quoteBoxDesc: "Customers can request product quotations and discuss delivery arrangements directly through WhatsApp or email for faster communication.",
+        mapTitle: "Location & Navigation",
+        mapNoteTitle: "Navigation Note",
+        mapNoteDesc: "You can replace the destination with your exact company address later for more accurate navigation.",
+
+        footerDesc: "A professional industrial hardware supplier website focused on product visibility, direct communication, parts sorting support, and fast delivery service.",
+        footerLinksTitle: "Quick Links",
+        footerLink1: "Home",
+        footerLink2: "About",
+        footerLink3: "Services",
+        footerLink4: "Products",
+        footerServicesTitle: "Categories",
+        footerCat1: "Screws",
+        footerCat2: "Bolts",
+        footerCat3: "Washers",
+        footerCat4: "Inserts",
+        footerContactTitle: "Contact",
+        footerHours: "Mon – Sat, 8:00 AM – 8:00 PM",
+        footerCopy: "© 2026 UNITED HAREWARE TRADING. All rights reserved.",
+        footerNote: "Industrial Hardware Supply • Fast Delivery • Responsive Website",
+
+        searchPlaceholder: "Search products...",
+        allCategories: "All Categories",
+        emptyTitle: "No products found",
+        emptyDesc: "Please try another keyword or choose another filter.",
+        viewDetails: "View Details",
+        requestQuotation: "Request Quotation",
+        modalSpec1Label: "Application",
+        modalSpec2Label: "Material / Type",
+        modalSpec3Label: "Service Note",
+        modalServiceNote: "Quotation, availability, and delivery arrangements can be discussed directly with our team.",
+        modalEmailButton: "Email Enquiry",
+        modalEmailSubject: "Hardware Product Enquiry"
+      },
+
+      zh: {
+        topbarText: "工业五金供应 • 零件分类 • 快速送货",
+        brandSubtitle: "专业工业五金供应商",
+        navQuoteBtn: "获取报价",
+
+        heroBadge1: "成立于 2023 年",
+        heroBadge2: "100+ 五金产品",
+        heroBadge3: "快速送货服务",
+        heroTitle: "可靠的工业五金供应与快速送货支持",
+        heroDesc: "UNITED HAREWARE TRADING 提供工业五金产品、零件分类服务、报价支持，并通过 WhatsApp、电邮、Google Maps 和 Waze 为客户提供更快速的沟通与导航方式。",
+        heroBtn1: "查看产品",
+        heroBtn2: "询价",
+        heroBtn3: "联系我们",
+        heroStat1: "产品类型",
+        heroStat2: "成立年份",
+        heroStat3: "送货服务",
+        heroPanelTitle: "我们提供的服务",
+        heroPanel1Title: "工业五金供应",
+        heroPanel1Desc: "提供适用于工业与一般用途的多种五金产品。",
+        heroPanel2Title: "零件分类",
+        heroPanel2Desc: "协助客户更有效率地处理与分类零件。",
+        heroPanel3Title: "快速送货",
+        heroPanel3Desc: "在需要时提供更快的送货安排支持。",
+        heroPanel4Title: "便捷联系",
+        heroPanel4Desc: "通过 WhatsApp、电邮、Google Maps 与 Waze 更快取得联系。",
+
+        aboutEyebrow: "关于我们",
+        aboutTitle: "工业五金供应与实用客户支持",
+        aboutDesc: "UNITED HAREWARE TRADING 是一家成立于 2023 年的五金供应公司，提供工业五金产品、零件分类服务以及快速送货支持。",
+        aboutCardTitle: "公司简介",
+        aboutText1: "我们专注于供应各类工业五金产品，例如螺丝、螺栓、螺母、垫圈、嵌件、轴承、钻头、螺丝刀和扳手等。",
+        aboutText2: "除了产品供应，我们也提供零件分类支持与快速送货服务，帮助客户提高效率并更方便地收到产品。",
+        aboutText3: "本网站旨在让客户更轻松浏览产品、了解服务内容，并通过 WhatsApp、电邮、Google Maps 和 Waze 快速与我们联系。",
+        aboutFeature1Title: "丰富产品种类",
+        aboutFeature1Desc: "满足不同用途与客户需求的工业五金产品。",
+        aboutFeature2Title: "零件分类服务",
+        aboutFeature2Desc: "协助客户更有效地整理和处理小型零件。",
+        aboutFeature3Title: "快速送货支持",
+        aboutFeature3Desc: "提供更实用的送货安排，支援客户的紧急需求。",
+
+        objectiveTitle: "我们的业务目标",
+        objective1Title: "建立客户信任",
+        objective1Desc: "通过清晰、专业的网站展示企业形象。",
+        objective2Title: "清楚展示产品",
+        objective2Desc: "通过更好的分类、搜索和筛选方式整理五金产品。",
+        objective3Title: "提供便捷联系",
+        objective3Desc: "让客户可直接通过 WhatsApp、电邮和电话联系我们。",
+        objective4Title: "提升客户获取方式",
+        objective4Desc: "通过 Google Maps 与 Waze 让导航更加方便。",
+
+        managerName: "William Yong",
+        managerRole: "总经理",
+        managerDesc1: "William Yong 是主要负责客户咨询、报价支持和业务沟通的负责人。",
+        managerDesc2: "客户可直接联系他咨询五金产品、报价、送货安排和相关服务支持。",
+        managerChip: "直接业务联系人",
+
+        servicesEyebrow: "我们的服务",
+        servicesTitle: "产品供应、分类支持、快速送货与直接咨询",
+        servicesDesc: "我们注重实用服务支持，让客户更快获取产品信息、报价与送货协助。",
+        service1Title: "五金产品供应",
+        service1Desc: "提供螺丝、螺栓、螺母、垫圈、轴承、嵌件、钻头及工具等工业五金产品。",
+        service2Title: "零件分类",
+        service2Desc: "协助客户进行零件分类、整理与处理，提升工作效率。",
+        service3Title: "快速送货",
+        service3Desc: "提供更快速的送货支持，让客户更方便收到五金产品。",
+        service4Title: "报价支持",
+        service4Desc: "客户可通过 WhatsApp 或电邮直接询价，以获得更快回应。",
+
+        quickWhatsAppTitle: "WhatsApp 联系",
+        quickWhatsAppDesc: "通过 WhatsApp 直接咨询产品与报价，沟通更快速。",
+        quickWhatsAppAction: "打开 WhatsApp",
+        quickMapsTitle: "Google Maps",
+        quickMapsDesc: "使用 Google Maps 进行路线规划和导航。",
+        quickMapsAction: "打开地图",
+        quickWazeTitle: "Waze",
+        quickWazeDesc: "使用 Waze 获取更实用的驾驶导航路线。",
+        quickWazeAction: "打开 Waze",
+
+        productsEyebrow: "产品目录",
+        productsTitle: "浏览我们的五金产品",
+        productsDesc: "通过关键字和类别浏览五金产品。页面会先显示精选产品，按下更多后可展开完整产品。",
+        productMetaFeatured: "目前显示精选产品",
+        productMetaAll: "目前显示全部产品",
+        productMetaFiltered: "目前显示筛选结果",
+        moreBtn: "更多产品",
+        lessBtn: "收起产品",
+
+        contactEyebrow: "联系我们",
+        contactTitle: "欢迎咨询产品、报价与送货支持",
+        contactDesc: "可通过 WhatsApp、电话、电邮、Google Maps 与 Waze 直接联系我们。",
+        contactCardTitle: "公司资料",
+        contactCompanyLabel: "公司名称",
+        contactPersonLabel: "负责人",
+        contactPhoneLabel: "电话 / WhatsApp",
+        contactEmailLabel: "电子邮箱",
+        contactHoursLabel: "营业时间",
+        contactHoursText: "星期一至星期六 | 上午 8:00 – 下午 8:00",
+        contactLocationLabel: "地点",
+        contactLocationText: "如有需要，请更新为公司的完整地址。",
+        contactBtn1: "WhatsApp 联系",
+        contactBtn2: "发送电邮",
+        contactBtn3: "Google Maps",
+        contactBtn4: "Waze",
+        quoteBoxTitle: "报价与送货",
+        quoteBoxDesc: "客户可通过 WhatsApp 或电邮直接咨询报价并讨论送货安排，以获得更快速的沟通。",
+        mapTitle: "位置与导航",
+        mapNoteTitle: "导航说明",
+        mapNoteDesc: "你之后可以把这里更换为公司的真实地址，以获得更准确的导航。",
+
+        footerDesc: "一个专注于产品展示、直接沟通、零件分类支持和快速送货服务的专业工业五金网站。",
+        footerLinksTitle: "快速链接",
+        footerLink1: "首页",
+        footerLink2: "关于我们",
+        footerLink3: "服务",
+        footerLink4: "产品",
+        footerServicesTitle: "类别",
+        footerCat1: "螺丝",
+        footerCat2: "螺栓",
+        footerCat3: "垫圈",
+        footerCat4: "嵌件",
+        footerContactTitle: "联系资料",
+        footerHours: "星期一至星期六，上午 9:00 – 下午 6:00",
+        footerCopy: "© 2026 UNITED HAREWARE TRADING。版权所有。",
+        footerNote: "工业五金供应 • 快速送货 • 响应式网站",
+
+        searchPlaceholder: "搜索产品...",
+        allCategories: "全部类别",
+        emptyTitle: "找不到相关产品",
+        emptyDesc: "请尝试其他关键字或更换筛选条件。",
+        viewDetails: "查看详情",
+        requestQuotation: "询价",
+        modalSpec1Label: "应用场景",
+        modalSpec2Label: "材质 / 类型",
+        modalSpec3Label: "服务说明",
+        modalServiceNote: "产品供应情况、报价和送货安排都可直接向我们的团队咨询。",
+        modalEmailButton: "电邮咨询",
+        modalEmailSubject: "五金产品咨询"
+      }
+    };
+
+    const categoryDisplay = {
+      en: {
+        "Bolts":"Bolts",
+        "Screws":"Screws",
+        "Nuts":"Nuts",
+        "Washers":"Washers",
+        "Bearings":"Bearings",
+        "Inserts":"Inserts",
+        "Wrenches":"Wrenches",
+        "Screwdrivers":"Screwdrivers",
+        "Drill Bits":"Drill Bits"
+      },
+      zh: {
+        "Bolts":"螺栓",
+        "Screws":"螺丝",
+        "Nuts":"螺母",
+        "Washers":"垫圈",
+        "Bearings":"轴承",
+        "Inserts":"嵌件",
+        "Wrenches":"扳手",
+        "Screwdrivers":"螺丝刀",
+        "Drill Bits":"钻头"
+      }
+    };
+
+    const products = [
+      { id:1, name:{en:"Hex Head Bolt",zh:"六角头螺栓"}, category:"Bolts", type:"Fastener", material:{en:"Carbon Steel / Stainless Steel",zh:"碳钢 / 不锈钢"}, application:{en:"Used in machinery assembly, structures, and industrial fastening.",zh:"用于机械组装、结构件以及工业紧固。"}, description:{en:"A strong fastening component widely used in industrial and construction work.",zh:"一种广泛用于工业和建筑领域的高强度紧固件。"} },
+      { id:2, name:{en:"Carriage Bolt",zh:"马车螺栓"}, category:"Bolts", type:"Fastener", material:{en:"Steel / Zinc Plated",zh:"钢 / 镀锌"}, application:{en:"Suitable for wood and metal joining work.",zh:"适用于木材与金属连接作业。"}, description:{en:"Rounded head and square neck design for secure installation.",zh:"圆头与方颈设计，安装更稳固。"} },
+      { id:3, name:{en:"Anchor Bolt",zh:"地脚螺栓"}, category:"Bolts", type:"Structural Fastener", material:{en:"Galvanized Steel",zh:"镀锌钢"}, application:{en:"Used to fix structures onto concrete bases.",zh:"用于把结构固定在混凝土基础上。"}, description:{en:"A common structural fastener for stronger foundation connection.",zh:"常见的结构紧固件，用于更稳固的基础连接。"} },
+      { id:4, name:{en:"U-Bolt",zh:"U型螺栓"}, category:"Bolts", type:"Fastener", material:{en:"Steel / Stainless Steel",zh:"钢 / 不锈钢"}, application:{en:"Commonly used to secure pipes and round structures.",zh:"常用于固定管道和圆形结构。"}, description:{en:"A U-shaped fastener for clamping cylindrical objects.",zh:"用于夹紧圆柱物体的 U 形紧固件。"} },
+
+      { id:5, name:{en:"Socket Cap Screw",zh:"内六角圆柱头螺钉"}, category:"Screws", type:"Fastener", material:{en:"Alloy Steel",zh:"合金钢"}, application:{en:"Ideal for compact machines and precise assembly.",zh:"适用于紧凑型机械和精密装配。"}, description:{en:"High-strength screw with hex socket drive.",zh:"采用内六角驱动的高强度螺钉。"} },
+      { id:6, name:{en:"Self Tapping Screw",zh:"自攻螺丝"}, category:"Screws", type:"Fastener", material:{en:"Hardened Steel",zh:"硬化钢"}, application:{en:"Common for sheet metal and plastic components.",zh:"常用于钣金和塑料零件。"}, description:{en:"Creates its own thread during installation for quick assembly.",zh:"安装时可自行切削螺纹，装配更快速。"} },
+      { id:7, name:{en:"Machine Screw",zh:"机螺钉"}, category:"Screws", type:"Fastener", material:{en:"Stainless Steel",zh:"不锈钢"}, application:{en:"Used in electronics, panels, and machine housings.",zh:"用于电子设备、面板及机械外壳。"}, description:{en:"A versatile screw for precise fastening in industrial applications.",zh:"适用于工业用途的多功能精密螺钉。"} },
+      { id:8, name:{en:"Drywall Screw",zh:"石膏板螺丝"}, category:"Screws", type:"Fastener", material:{en:"Phosphate Coated Steel",zh:"磷化处理钢"}, application:{en:"Used for drywall installation work.",zh:"用于石膏板安装。"}, description:{en:"Specialized screw for interior construction works.",zh:"适用于室内施工的专用螺丝。"} },
+
+      { id:9, name:{en:"Hex Nut",zh:"六角螺母"}, category:"Nuts", type:"Fastener", material:{en:"Steel / Stainless Steel",zh:"钢 / 不锈钢"}, application:{en:"Used with bolts and screws in fastening systems.",zh:"与螺栓、螺钉搭配使用。"}, description:{en:"A standard nut for many industrial and mechanical assemblies.",zh:"适用于多种工业和机械装配的标准螺母。"} },
+      { id:10, name:{en:"Lock Nut",zh:"防松螺母"}, category:"Nuts", type:"Fastener", material:{en:"Nylon Insert Steel",zh:"尼龙嵌件钢"}, application:{en:"Suitable for vibration-prone machinery.",zh:"适用于有震动的机械。"}, description:{en:"Designed to resist loosening caused by vibration.",zh:"可减少因震动产生的松动。"} },
+      { id:11, name:{en:"Wing Nut",zh:"蝶形螺母"}, category:"Nuts", type:"Hand Tightening Fastener", material:{en:"Steel / Zinc Plated",zh:"钢 / 镀锌"}, application:{en:"Ideal for manual tightening without tools.",zh:"适用于无需工具即可手动拧紧的场合。"}, description:{en:"Features two wings for easier manual operation.",zh:"带双翼设计，方便手动操作。"} },
+      { id:12, name:{en:"Cap Nut",zh:"盖形螺母"}, category:"Nuts", type:"Fastener", material:{en:"Stainless Steel",zh:"不锈钢"}, application:{en:"Used where safer finished ends are needed.",zh:"适用于需要更安全末端保护的场合。"}, description:{en:"Covers exposed bolt ends for cleaner finishing.",zh:"可覆盖外露螺栓末端，外观更整洁。"} },
+
+      { id:13, name:{en:"Flat Washer",zh:"平垫圈"}, category:"Washers", type:"Fastener Accessory", material:{en:"Mild Steel / Stainless Steel",zh:"低碳钢 / 不锈钢"}, application:{en:"Distributes load and protects surfaces.",zh:"分散受力并保护表面。"}, description:{en:"An important accessory for better load distribution.",zh:"可改善受力分布的重要配件。"} },
+      { id:14, name:{en:"Spring Washer",zh:"弹簧垫圈"}, category:"Washers", type:"Fastener Accessory", material:{en:"Spring Steel",zh:"弹簧钢"}, application:{en:"Helps prevent loosening in vibrating joints.",zh:"可减少震动接合处的松动。"}, description:{en:"Provides tension in fastening systems.",zh:"在紧固系统中提供张力。"} },
+      { id:15, name:{en:"Fender Washer",zh:"大垫圈"}, category:"Washers", type:"Fastener Accessory", material:{en:"Steel / Stainless Steel",zh:"钢 / 不锈钢"}, application:{en:"Provides a larger bearing surface for thin materials.",zh:"为薄材料提供更大的受力面积。"}, description:{en:"Used for better load spread on panels and thin parts.",zh:"适用于面板和薄零件更好的载荷分布。"} },
+      { id:16, name:{en:"Tooth Washer",zh:"齿形垫圈"}, category:"Washers", type:"Fastener Accessory", material:{en:"Steel",zh:"钢"}, application:{en:"Used for better grip in electrical and mechanical joints.",zh:"用于电气和机械接合处增强抓力。"}, description:{en:"Improves locking effect in fastening assemblies.",zh:"提升紧固结构中的锁紧效果。"} },
+
+      { id:17, name:{en:"Ball Bearing",zh:"滚珠轴承"}, category:"Bearings", type:"Mechanical Part", material:{en:"Bearing Steel",zh:"轴承钢"}, application:{en:"Used in motors, wheels, and rotating systems.",zh:"用于马达、轮组和旋转系统。"}, description:{en:"Reduces friction and supports smooth rotation.",zh:"降低摩擦并支撑顺畅旋转。"} },
+      { id:18, name:{en:"Plain Bearing",zh:"滑动轴承"}, category:"Bearings", type:"Mechanical Part", material:{en:"Bronze / Composite",zh:"青铜 / 复合材料"}, application:{en:"Supports sliding or rotating motion under load.",zh:"支撑承载下的滑动或旋转运动。"}, description:{en:"A practical bearing solution for controlled movement.",zh:"适用于受控运动的实用轴承方案。"} },
+      { id:19, name:{en:"Needle Bearing",zh:"滚针轴承"}, category:"Bearings", type:"Mechanical Part", material:{en:"Bearing Steel",zh:"轴承钢"}, application:{en:"Suitable for compact machinery and high-load use.",zh:"适用于紧凑型机械与高负载应用。"}, description:{en:"A compact bearing for limited installation space.",zh:"适用于安装空间有限的紧凑型轴承。"} },
+      { id:20, name:{en:"Flange Bearing",zh:"法兰轴承"}, category:"Bearings", type:"Mechanical Part", material:{en:"Bearing Steel / Cast Housing",zh:"轴承钢 / 铸造座"}, application:{en:"Used for mounting rotating shafts with support housing.",zh:"用于带支撑座的旋转轴安装。"}, description:{en:"Provides easier shaft support and stable installation.",zh:"提供更方便的轴支撑与稳定安装。"} },
+
+      { id:21, name:{en:"Threaded Insert",zh:"螺纹嵌件"}, category:"Inserts", type:"Thread Support", material:{en:"Brass / Steel",zh:"黄铜 / 钢"}, application:{en:"Adds stronger internal threads to soft materials.",zh:"为软质材料增加更强的内螺纹。"}, description:{en:"Improves thread durability and fastening strength.",zh:"提升螺纹耐久性和紧固强度。"} },
+      { id:22, name:{en:"Helical Insert",zh:"钢丝螺套"}, category:"Inserts", type:"Thread Repair", material:{en:"Stainless Steel",zh:"不锈钢"}, application:{en:"Used for thread repair and reinforcement.",zh:"用于螺纹修复与加强。"}, description:{en:"Restores damaged internal threads in engineering work.",zh:"用于工程作业中恢复损坏的内螺纹。"} },
+      { id:23, name:{en:"Knurled Insert",zh:"滚花嵌件"}, category:"Inserts", type:"Thread Support", material:{en:"Brass",zh:"黄铜"}, application:{en:"Often used in plastic parts to improve thread strength.",zh:"常用于塑料零件以加强螺纹强度。"}, description:{en:"Provides durable internal threads in molded materials.",zh:"为成型材料提供耐用内螺纹。"} },
+      { id:24, name:{en:"Press Fit Insert",zh:"压入式嵌件"}, category:"Inserts", type:"Thread Support", material:{en:"Steel / Brass",zh:"钢 / 黄铜"}, application:{en:"Used for quick installation in prepared holes.",zh:"用于已加工孔位中的快速安装。"}, description:{en:"A practical insert for simple and secure fitment.",zh:"适用于简易且牢固安装的实用嵌件。"} },
+
+      { id:25, name:{en:"Open-End Wrench",zh:"开口扳手"}, category:"Wrenches", type:"Hand Tool", material:{en:"Chrome Vanadium Steel",zh:"铬钒钢"}, application:{en:"Used for tightening and loosening nuts and bolts.",zh:"用于拧紧和拆卸螺母螺栓。"}, description:{en:"A basic but essential tool for workshop and repair tasks.",zh:"适用于车间和维修工作的基础重要工具。"} },
+      { id:26, name:{en:"Combination Wrench",zh:"两用扳手"}, category:"Wrenches", type:"Hand Tool", material:{en:"Chrome Vanadium Steel",zh:"铬钒钢"}, application:{en:"Offers both open-end and ring-end functions.",zh:"同时提供开口端和梅花端功能。"}, description:{en:"A practical maintenance tool for multiple fastening tasks.",zh:"适用于多种紧固作业的实用维修工具。"} },
+      { id:27, name:{en:"Allen Key Set",zh:"内六角扳手组"}, category:"Wrenches", type:"Hand Tool", material:{en:"Alloy Steel",zh:"合金钢"}, application:{en:"Used for socket screws in machines and furniture.",zh:"用于机械与家具中的内六角螺钉。"}, description:{en:"A set of hex keys for precise maintenance work.",zh:"适用于精密维修工作的内六角工具组。"} },
+      { id:28, name:{en:"Adjustable Wrench",zh:"活动扳手"}, category:"Wrenches", type:"Hand Tool", material:{en:"Forged Steel",zh:"锻钢"}, application:{en:"Useful for different nut sizes with one tool.",zh:"适用于使用单一工具应对不同尺寸螺母。"}, description:{en:"An adjustable hand tool for general maintenance use.",zh:"适合一般维修作业的可调式手工具。"} },
+
+      { id:29, name:{en:"Phillips Screwdriver",zh:"十字螺丝刀"}, category:"Screwdrivers", type:"Hand Tool", material:{en:"Steel Shaft / Rubber Grip",zh:"钢制杆身 / 橡胶握柄"}, application:{en:"Suitable for cross-head screws in many tasks.",zh:"适用于多种十字螺丝作业。"}, description:{en:"A common hand tool for fastening and removal.",zh:"常见的紧固与拆卸手工具。"} },
+      { id:30, name:{en:"Flat Screwdriver",zh:"一字螺丝刀"}, category:"Screwdrivers", type:"Hand Tool", material:{en:"Steel Shaft / Rubber Grip",zh:"钢制杆身 / 橡胶握柄"}, application:{en:"Used for slotted screws in repair and assembly.",zh:"用于维修和装配中的一字螺丝。"}, description:{en:"A practical tool for straight-slot screw applications.",zh:"适用于一字槽螺丝的实用工具。"} },
+      { id:31, name:{en:"Precision Screwdriver Set",zh:"精密螺丝刀组"}, category:"Screwdrivers", type:"Hand Tool", material:{en:"Alloy Steel / Plastic Case",zh:"合金钢 / 塑料盒"}, application:{en:"Suitable for electronics and small device repair.",zh:"适用于电子产品和小型装置维修。"}, description:{en:"Includes small screwdriver heads for fine work.",zh:"包含适用于细致工作的多种小型螺丝刀头。"} },
+      { id:32, name:{en:"Insulated Screwdriver",zh:"绝缘螺丝刀"}, category:"Screwdrivers", type:"Hand Tool", material:{en:"Insulated Steel",zh:"绝缘钢"}, application:{en:"Used in electrical maintenance tasks.",zh:"用于电气维修工作。"}, description:{en:"Designed for safer screw work in electrical environments.",zh:"适用于电气环境下更安全的螺丝作业。"} },
+
+      { id:33, name:{en:"Twist Drill Bit",zh:"麻花钻头"}, category:"Drill Bits", type:"Cutting Tool", material:{en:"HSS Steel",zh:"高速钢"}, application:{en:"Used for drilling metal, wood, and plastic.",zh:"用于金属、木材和塑料钻孔。"}, description:{en:"A versatile drill bit type for general drilling work.",zh:"适用于一般钻孔工作的多用途钻头。"} },
+      { id:34, name:{en:"Masonry Drill Bit",zh:"石工钻头"}, category:"Drill Bits", type:"Cutting Tool", material:{en:"Carbide Tip",zh:"硬质合金刀头"}, application:{en:"Designed for concrete, brick, and masonry.",zh:"适用于混凝土、砖墙和石工作业。"}, description:{en:"A durable drill bit for harder building materials.",zh:"适用于较硬建筑材料的耐用钻头。"} },
+      { id:35, name:{en:"Step Drill Bit",zh:"阶梯钻头"}, category:"Drill Bits", type:"Cutting Tool", material:{en:"HSS Steel",zh:"高速钢"}, application:{en:"Commonly used for enlarging holes in thin sheet materials.",zh:"常用于薄板材料扩孔。"}, description:{en:"A multi-diameter bit for gradual and clean hole enlargement.",zh:"可逐级干净扩孔的多直径钻头。"} },
+      { id:36, name:{en:"Wood Drill Bit",zh:"木工钻头"}, category:"Drill Bits", type:"Cutting Tool", material:{en:"Carbon Steel",zh:"碳钢"}, application:{en:"Used for clean drilling in timber and wood panels.",zh:"用于木材和木板的干净钻孔。"}, description:{en:"Suitable for woodworking and furniture applications.",zh:"适用于木工与家具应用。"} }
+    ];
+
+    function shapeByCategory(category) {
+      const shapes = {
+        "Bolts": `
+          <rect x="290" y="245" width="220" height="36" rx="12" fill="url(#metal)" stroke="#6b7280" stroke-width="4"/>
+          <polygon points="250,220 300,190 360,200 380,245 360,290 300,300 250,270" fill="url(#metal)" stroke="#6b7280" stroke-width="4"/>
+        `,
+        "Screws": `
+          <polygon points="250,250 340,210 520,210 520,290 340,290" fill="url(#metal)" stroke="#6b7280" stroke-width="4"/>
+          <path d="M520 210 L610 250 L520 290 Z" fill="url(#metal)" stroke="#6b7280" stroke-width="4"/>
+          <line x1="300" y1="220" x2="300" y2="280" stroke="#6b7280" stroke-width="5"/>
+          <line x1="275" y1="250" x2="325" y2="250" stroke="#6b7280" stroke-width="5"/>
+        `,
+        "Nuts": `
+          <polygon points="400,170 500,230 500,350 400,410 300,350 300,230" fill="url(#metal)" stroke="#6b7280" stroke-width="4"/>
+          <circle cx="400" cy="290" r="52" fill="#eef5ff" stroke="#6b7280" stroke-width="18"/>
+        `,
+        "Washers": `
+          <circle cx="400" cy="290" r="120" fill="url(#metal)" stroke="#6b7280" stroke-width="8"/>
+          <circle cx="400" cy="290" r="54" fill="#eef5ff" stroke="#6b7280" stroke-width="14"/>
+        `,
+        "Bearings": `
+          <circle cx="400" cy="290" r="120" fill="none" stroke="#6b7280" stroke-width="20"/>
+          <circle cx="400" cy="290" r="72" fill="none" stroke="#9ca3af" stroke-width="16"/>
+          <circle cx="400" cy="290" r="24" fill="#6b7280"/>
+          <circle cx="400" cy="170" r="16" fill="#9ca3af"/>
+          <circle cx="485" cy="205" r="16" fill="#9ca3af"/>
+          <circle cx="520" cy="290" r="16" fill="#9ca3af"/>
+          <circle cx="485" cy="375" r="16" fill="#9ca3af"/>
+          <circle cx="400" cy="410" r="16" fill="#9ca3af"/>
+          <circle cx="315" cy="375" r="16" fill="#9ca3af"/>
+          <circle cx="280" cy="290" r="16" fill="#9ca3af"/>
+          <circle cx="315" cy="205" r="16" fill="#9ca3af"/>
+        `,
+        "Inserts": `
+          <rect x="320" y="190" width="160" height="200" rx="26" fill="url(#metal)" stroke="#6b7280" stroke-width="5"/>
+          <line x1="340" y1="220" x2="460" y2="220" stroke="#6b7280" stroke-width="4"/>
+          <line x1="340" y1="250" x2="460" y2="250" stroke="#6b7280" stroke-width="4"/>
+          <line x1="340" y1="280" x2="460" y2="280" stroke="#6b7280" stroke-width="4"/>
+          <line x1="340" y1="310" x2="460" y2="310" stroke="#6b7280" stroke-width="4"/>
+          <line x1="340" y1="340" x2="460" y2="340" stroke="#6b7280" stroke-width="4"/>
+        `,
+        "Wrenches": `
+          <path d="M280 240 C260 190 320 150 370 175 L345 205 L370 230 L400 205 L420 225 L390 255 L420 285 L650 515 L615 550 L385 320 L355 350 L330 325 L360 295 L330 265 Z" fill="url(#metal)" stroke="#6b7280" stroke-width="4"/>
+        `,
+        "Screwdrivers": `
+          <rect x="250" y="255" width="250" height="28" rx="10" fill="url(#metal)" stroke="#6b7280" stroke-width="4"/>
+          <path d="M500 242 L610 255 L610 283 L500 296 Z" fill="url(#metal)" stroke="#6b7280" stroke-width="4"/>
+          <rect x="170" y="220" width="95" height="100" rx="26" fill="#0d47a1" opacity="0.9"/>
+        `,
+        "Drill Bits": `
+          <path d="M280 370 L370 150 L430 150 L520 370 Z" fill="url(#metal)" stroke="#6b7280" stroke-width="4"/>
+          <line x1="350" y1="200" x2="460" y2="320" stroke="#6b7280" stroke-width="4"/>
+          <line x1="330" y1="250" x2="440" y2="370" stroke="#6b7280" stroke-width="4"/>
+        `
+      };
+      return shapes[category] || shapes["Bolts"];
+    }
+
+    function generateProductSVG(product){
+      const name = product.name.en;
+      const category = product.category;
+      const safeName = encodeURIComponent(name);
+      const safeCategory = encodeURIComponent(category);
+
+      return `data:image/svg+xml;charset=UTF-8,
+      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'>
+        <defs>
+          <linearGradient id='bg' x1='0' y1='0' x2='1' y2='1'>
+            <stop offset='0%' stop-color='%23eef5ff'/>
+            <stop offset='100%' stop-color='%23dbeafe'/>
+          </linearGradient>
+          <linearGradient id='metal' x1='0' x2='1'>
+            <stop offset='0%' stop-color='%239ca3af'/>
+            <stop offset='50%' stop-color='%23f3f4f6'/>
+            <stop offset='100%' stop-color='%236b7280'/>
+          </linearGradient>
+        </defs>
+        <rect width='800' height='600' fill='url(%23bg)'/>
+        <g opacity='0.12'>
+          <circle cx='110' cy='100' r='70' fill='%230d47a1'/>
+          <circle cx='700' cy='500' r='90' fill='%231f65d6'/>
+          <circle cx='700' cy='100' r='58' fill='%23f59e0b'/>
+        </g>
+        ${encodeURIComponent(shapeByCategory(category))
+          .replace(/%3C/g,"<").replace(/%3E/g,">").replace(/%23/g,"#")
+          .replace(/%22/g,'"').replace(/%20/g," ").replace(/%0A/g,"")}
+        <rect x='100' y='440' width='600' height='100' rx='24' fill='rgba(255,255,255,0.72)'/>
+        <text x='50%' y='482' dominant-baseline='middle' text-anchor='middle' font-family='Segoe UI, Arial' font-size='32' font-weight='800' fill='%230f172a'>${safeName}</text>
+        <text x='50%' y='518' dominant-baseline='middle' text-anchor='middle' font-family='Segoe UI, Arial' font-size='19' font-weight='700' fill='%234b5563'>${safeCategory}</text>
+      </svg>`;
+    }
+
+    products.forEach(p => p.image = generateProductSVG(p));
+
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const productsGrid = document.getElementById("productsGrid");
+    const emptyState = document.getElementById("emptyState");
+    const toggleMoreBtn = document.getElementById("toggleMoreBtn");
+    const productMetaText = document.getElementById("productMetaText");
+
+    function populateCategories(){
+      const categories = [...new Set(products.map(p => p.category))];
+      categoryFilter.innerHTML = `<option value="all">${translations[currentLang].allCategories}</option>`;
+      categories.forEach(cat => {
+        const option = document.createElement("option");
+        option.value = cat;
+        option.textContent = categoryDisplay[currentLang][cat] || cat;
+        categoryFilter.appendChild(option);
+      });
+    }
+
+    function getFilteredProducts(){
+      const keyword = searchInput.value.trim().toLowerCase();
+      const selectedCategory = categoryFilter.value;
+
+      return products.filter(product => {
+        const name = product.name[currentLang].toLowerCase();
+        const desc = product.description[currentLang].toLowerCase();
+        const material = product.material[currentLang].toLowerCase();
+
+        const matchKeyword =
+          !keyword ||
+          name.includes(keyword) ||
+          desc.includes(keyword) ||
+          material.includes(keyword);
+
+        const matchCategory =
+          selectedCategory === "all" || product.category === selectedCategory;
+
+        return matchKeyword && matchCategory;
+      });
+    }
+
+    function renderProducts(){
+      const filtered = getFilteredProducts();
+      const hasSearch = searchInput.value.trim() !== "";
+      const hasCategory = categoryFilter.value !== "all";
+      const usingFilter = hasSearch || hasCategory;
+
+      let shownProducts = filtered;
+
+      if (!usingFilter) {
+        shownProducts = expandedProducts ? filtered : filtered.slice(0, featuredCount);
+        productMetaText.textContent = expandedProducts
+          ? translations[currentLang].productMetaAll
+          : translations[currentLang].productMetaFeatured;
+        toggleMoreBtn.style.display = filtered.length > featuredCount ? "inline-flex" : "none";
+        toggleMoreBtn.querySelector("span:last-child").textContent = expandedProducts
+          ? translations[currentLang].lessBtn
+          : translations[currentLang].moreBtn;
+      } else {
+        productMetaText.textContent = translations[currentLang].productMetaFiltered;
+        toggleMoreBtn.style.display = "none";
+      }
+
+      productsGrid.innerHTML = "";
+
+      if (shownProducts.length === 0) {
+        emptyState.style.display = "block";
+        return;
+      } else {
+        emptyState.style.display = "none";
+      }
+
+      shownProducts.forEach(product => {
+        const card = document.createElement("article");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-img-wrap">
+            <img class="product-img" src="${product.image}" alt="${product.name[currentLang]}" loading="lazy">
+          </div>
+          <div class="product-body">
+            <span class="product-category">${categoryDisplay[currentLang][product.category] || product.category}</span>
+            <h3 class="product-title">${product.name[currentLang]}</h3>
+            <p class="product-desc">${product.description[currentLang]}</p>
+            <div class="product-actions">
+              <button class="btn btn-outline" data-detail="${product.id}">${translations[currentLang].viewDetails}</button>
+              <a
+                class="btn btn-success"
+                href="https://wa.me/60189029391?text=${encodeURIComponent(
+                  currentLang === "en"
+                    ? `Hello, I would like to ask about ${product.name.en}.`
+                    : `你好，我想咨询 ${product.name.zh}。`
+                )}"
+                target="_blank"
+                rel="noopener"
+              >
+                <span>💬</span>
+                <span>${translations[currentLang].requestQuotation}</span>
+              </a>
+            </div>
+          </div>
+        `;
+        productsGrid.appendChild(card);
+      });
+
+      document.querySelectorAll("[data-detail]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = Number(btn.getAttribute("data-detail"));
+          const product = products.find(p => p.id === id);
+          openModal(product);
+        });
+      });
+    }
+
+    toggleMoreBtn.addEventListener("click", () => {
+      expandedProducts = !expandedProducts;
+      renderProducts();
+    });
+
+    searchInput.addEventListener("input", renderProducts);
+    categoryFilter.addEventListener("change", renderProducts);
+
+    const modal = document.getElementById("productModal");
+    const modalClose = document.getElementById("modalClose");
+    const modalImage = document.getElementById("modalImage");
+    const modalCategory = document.getElementById("modalCategory");
+    const modalProductTitle = document.getElementById("modalProductTitle");
+    const modalDescription = document.getElementById("modalDescription");
+    const modalApplication = document.getElementById("modalApplication");
+    const modalMaterial = document.getElementById("modalMaterial");
+    const modalServiceNote = document.getElementById("modalServiceNote");
+    const modalWhatsappBtn = document.getElementById("modalWhatsappBtn");
+    const modalEmailBtn = document.getElementById("modalEmailBtn");
+
+    function openModal(product){
+      if(!product) return;
+
+      modalImage.src = product.image;
+      modalImage.alt = product.name[currentLang];
+      modalCategory.textContent = categoryDisplay[currentLang][product.category] || product.category;
+      modalProductTitle.textContent = product.name[currentLang];
+      modalDescription.textContent = product.description[currentLang];
+      modalApplication.textContent = product.application[currentLang];
+      modalMaterial.textContent = `${product.material[currentLang]} / ${product.type}`;
+      modalServiceNote.textContent = translations[currentLang].modalServiceNote;
+
+      modalWhatsappBtn.querySelector("span:last-child").textContent = translations[currentLang].requestQuotation;
+      modalWhatsappBtn.href = `https://wa.me/60189029391?text=${encodeURIComponent(
+        currentLang === "en"
+          ? `Hello, I would like to request a quotation for ${product.name.en}.`
+          : `你好，我想询问 ${product.name.zh} 的报价。`
+      )}`;
+
+      modalEmailBtn.querySelector("span:last-child").textContent = translations[currentLang].modalEmailButton;
+      modalEmailBtn.href = `mailto:united.hardware.trading@gmail.com?subject=${encodeURIComponent(
+        `${translations[currentLang].modalEmailSubject} - ${product.name[currentLang]}`
+      )}`;
+
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(){
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", e => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeModal();
+    });
+
+    function updateTexts(){
+      const t = translations[currentLang];
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.dataset.i18nPlaceholder;
+        if (t[key] !== undefined) el.placeholder = t[key];
+      });
+
+      const navMap = {
+        home: currentLang === "en" ? "Home" : "首页",
+        about: currentLang === "en" ? "About" : "关于我们",
+        services: currentLang === "en" ? "Services" : "服务",
+        products: currentLang === "en" ? "Products" : "产品",
+        contact: currentLang === "en" ? "Contact" : "联系我们"
+      };
+
+      document.querySelectorAll("[data-nav]").forEach(link => {
+        link.textContent = navMap[link.dataset.nav] || link.dataset.nav;
+      });
+
+      const currentCategory = categoryFilter.value;
+      populateCategories();
+      if ([...categoryFilter.options].some(op => op.value === currentCategory)) {
+        categoryFilter.value = currentCategory;
+      }
+
+      renderProducts();
+    }
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".lang-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentLang = btn.dataset.lang;
+        document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
+        updateTexts();
+      });
+    });
+
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    menuToggle.addEventListener("click", () => {
+      navLinks.classList.toggle("show");
+    });
+
+    document.querySelectorAll(".nav-links a").forEach(link => {
+      link.addEventListener("click", () => navLinks.classList.remove("show"));
+    });
+
+    const revealEls = document.querySelectorAll("[data-reveal]");
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    const sections = document.querySelectorAll("section[id]");
+    const navItems = document.querySelectorAll(".nav-links a");
+
+    function updateActiveNav(){
+      const scrollY = window.scrollY + 120;
+      sections.forEach(section => {
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        const id = section.getAttribute("id");
+        if (scrollY >= top && scrollY < top + height) {
+          navItems.forEach(item => item.classList.remove("active"));
+          const active = document.querySelector(`.nav-links a[href="#${id}"]`);
+          if (active) active.classList.add("active");
+        }
+      });
+    }
+
+    window.addEventListener("scroll", updateActiveNav);
+
+    populateCategories();
+    updateTexts();
+    updateActiveNav();
+  </script>
+</body>
+</html>
