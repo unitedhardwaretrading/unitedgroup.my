@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home | United Hardware Trading</title>
+  <title>Products | United Hardware Trading</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -35,44 +35,69 @@
   </div>
 </header>
 
-<main>
-  <section class="hero reveal">
-    <div class="container hero-content text-center">
-      <h1 class="hero-brand-title">UNITED HARDWARE TRADING</h1>
-    </div>
-  </section>
+<main class="container" style="padding: 30px 15px;">
+  <div class="product-layout reveal">
+    <!-- Left Sidebar -->
+    <aside class="product-sidebar">
+      <div class="sidebar-block">
+        <h3 class="sidebar-title">Search</h3>
+        <div class="sidebar-search-box">
+          <input type="text" id="pageSearch" placeholder="Search products...">
+          <span class="sidebar-search-icon">
+            <svg class="search-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </span>
+        </div>
+      </div>
 
-  <!-- Category Auto-Slider -->
-  <section class="cat-slider-section reveal">
-    <div class="container text-center" style="text-align: center; margin-bottom: 24px;">
-      <h2 class="section-title" style="margin: 0; display: inline-flex; align-items: center;">
-        Shop by Category
-        <span class="title-arrows">
-          <button class="title-arrow-btn" onclick="scrollCat(-1)" title="Previous">‹</button>
-          <button class="title-arrow-btn" onclick="scrollCat(1)" title="Next">›</button>
-        </span>
-      </h2>
-    </div>
-    <div class="cat-slider-viewport" id="catSliderViewport">
-      <div class="cat-slider-inner" id="catSliderInner"></div>
-    </div>
-  </section>
+      <div class="sidebar-block">
+        <h3 class="sidebar-title">Category</h3>
+        <ul class="sidebar-cat-list" id="sidebarCatList">
+          <!-- JS will populate category list -->
+        </ul>
+      </div>
+    </aside>
 
-  <section class="featured-products reveal" style="padding: 50px 0; background-color: #f9f9f9; overflow: hidden;">
-    <div class="container text-center" style="text-align: center; margin-bottom: 24px;">
-      <h2 style="margin: 0; font-size: 1.8rem; font-weight: 800; color: var(--dark); letter-spacing: .02em; display: inline-flex; align-items: center;">
-        Popular Products
-        <span class="title-arrows">
-          <button class="title-arrow-btn" onclick="scrollPop(-1)" title="Previous">‹</button>
-          <button class="title-arrow-btn" onclick="scrollPop(1)" title="Next">›</button>
-        </span>
-      </h2>
-    </div>
-    <div class="pop-slider-viewport" id="popSliderViewport">
-      <div class="pop-slider-inner" id="popSliderInner"></div>
-    </div>
-  </section>
+    <!-- Right Content Area -->
+    <section class="product-content">
+      <div class="breadcrumb-nav">
+        <a href="index.html">Home</a> &gt; <span id="breadcrumbCurrent">Our Products</span>
+      </div>
+      <div class="product-header-bar">
+        <h1 id="pageCategoryTitle">Our Products</h1>
+        <span id="productTotalCount" class="product-total-count">Showing products</span>
+      </div>
+      <div id="productPageGrid" class="products-grid"></div>
+    </section>
+  </div>
 </main>
+
+<!-- Product Detail Modal -->
+<div id="productModal" class="modal-overlay">
+  <div class="modal-box">
+    <button id="modalClose" class="modal-close">&times;</button>
+    <div class="modal-grid">
+      <div class="modal-img-wrap">
+        <img id="modalImg" class="modal-img" src="" alt="">
+      </div>
+      <div class="modal-body">
+        <span id="modalCatTag" class="modal-cat-tag"></span>
+        <h3 id="modalName"></h3>
+        <p id="modalDesc"></p>
+        <div class="modal-specs">
+          <div class="modal-spec"><strong>Application</strong><span id="modalApp"></span></div>
+          <div class="modal-spec"><strong>Material / Type</strong><span id="modalMat"></span></div>
+        </div>
+        <div class="modal-actions">
+          <a id="modalWaBtn" href="#" class="btn btn-success" target="_blank" rel="noopener">WhatsApp Enquiry</a>
+          <a id="modalEmBtn" href="#" class="btn btn-primary" target="_blank" rel="noopener">Email Enquiry</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <footer class="footer">
   <div class="container">
