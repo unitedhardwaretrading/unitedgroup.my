@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - UNITED HARDWARE TRADING</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    body { background: #f8fafc; }
+    .admin-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+    .admin-header h1 { font-size: 2rem; color: var(--dark); }
+    .export-btn { font-size: 1.1rem; padding: 14px 24px; }
+    .image-preview { margin-top: 10px; max-width: 120px; max-height: 120px; border-radius: 8px; display: none; object-fit: cover; border: 1px solid var(--line); }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <img src="logo.jpeg" alt="United Hardware Trading">
+        <span>UNITED HARDWARE TRADING - ADMIN</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Back to Website</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="admin-container">
+    
+    <div class="export-bar">
+      <div>
+        <h3>Data Management</h3>
+        <p class="text-muted">Changes made here are temporary until you export or sync to GitHub.</p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button id="syncSettingsBtn" class="btn btn-outline export-btn" onclick="openSyncModal()">⚙️ Sync Settings</button>
+        <button id="exportExcelBtn" class="btn btn-outline export-btn" onclick="exportToExcel()">📊 Export Excel</button>
+        <label class="btn btn-outline export-btn" style="cursor: pointer;">
+          📂 Import Excel
+          <input type="file" id="importExcelFile" accept=".xlsx, .xls" style="display: none;" onchange="importFromExcel(event)">
+        </label>
+        <button id="exportBtn" class="btn btn-outline export-btn">💾 Manual Export (JS)</button>
+        <button id="autoSyncBtn" class="btn btn-success export-btn" onclick="autoSync()">🚀 Auto Sync to Live Site</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="admin-tabs">
+        <div class="admin-tab active" data-target="catTab">Categories</div>
+        <div class="admin-tab" data-target="matTab">Materials</div>
+        <div class="admin-tab" data-target="prodTab">Products</div>
+        <div class="admin-tab" data-target="logTab">Audit Log</div>
+      </div>
+
+      <div id="catTab" class="admin-panel active">
+        <div class="admin-header">
+          <h3>Manage Categories</h3>
+          <button class="btn btn-primary" onclick="openCatModal()">+ Add Category</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="catTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="matTab" class="admin-panel">
+        <div class="admin-header">
+          <h3>Manage Materials</h3>
+          <button class="btn btn-primary" onclick="openMatModal()">+ Add Material</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="matTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="prodTab" class="admin-panel">
+        <div class="admin-header">
+          <h3>Manage Products</h3>
+          <button class="btn btn-primary" onclick="openProdModal()">+ Add Product</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="prodTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="logTab" class="admin-panel">
+        <div class="admin-header">
+          <h3>Audit Log</h3>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 170px;">Time</th>
+                <th style="width: 130px;">Action</th>
+                <th style="width: 200px;">Target Item</th>
+                <th>Detailed Changes</th>
+              </tr>
+            </thead>
+            <tbody id="logTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Category Modal -->
+  <div id="catModal" class="modal-overlay">
+    <div class="modal-box" style="width: 500px;">
+      <button class="modal-close" onclick="closeCatModal()">&times;</button>
+      <div class="modal-body">
+        <h3 id="catModalTitle">Add Category</h3>
+        <input type="hidden" id="catId">
+        <div class="form-group">
+          <label>Category Name</label>
+          <input type="text" id="catName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Upload Image</label>
+          <input type="file" id="catImageFile" accept="image/*" class="form-control" style="margin-bottom: 8px;">
+          <small class="text-muted">Or enter an image URL / path directly:</small>
+          <input type="text" id="catImage" class="form-control" placeholder="https://... or uploads/img.jpg">
+          <img id="catImagePreview" class="image-preview">
+        </div>
+        <div class="form-group">
+          <label>Home Page Display Order</label>
+          <input type="number" id="catHomeOrder" class="form-control" value="1" min="1">
+          <small class="text-muted">Lower number = appears first in the category slider on the home page.</small>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveCategory()">Save Category</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div id="prodModal" class="modal-overlay">
+    <div class="modal-box" style="width: 600px;">
+      <button class="modal-close" onclick="closeProdModal()">&times;</button>
+      <div class="modal-body">
+        <h3 id="prodModalTitle">Add Product</h3>
+        <input type="hidden" id="prodId">
+        
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="prodName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="prodCategory" class="form-control" required></select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="prodDesc" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Price</label>
+          <input type="text" id="prodPrice" class="form-control" value="Contact for price">
+        </div>
+        
+        <div class="form-group">
+          <label>Upload Image</label>
+          <input type="file" id="prodImageFile" accept="image/*" class="form-control" style="margin-bottom: 8px;">
+          <small class="text-muted">Or enter an image URL / path directly:</small>
+          <input type="text" id="prodImage" class="form-control" placeholder="https://... or uploads/img.jpg">
+          <img id="prodImagePreview" class="image-preview">
+        </div>
+
+        <div class="form-group">
+          <label>Application / Usage</label>
+          <input type="text" id="prodApp" class="form-control">
+        </div>
+        <div class="form-group">
+          <label>Material / Type</label>
+          <select id="prodMat" class="form-control">
+            <option value="">-- Select Material --</option>
+          </select>
+        </div>
+        <div class="form-group" style="display: flex; gap: 20px; align-items: center; margin-top: 15px;">
+          <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="prodIsPopular" style="width: 20px; height: 20px;"> 
+            <strong>Show in Popular Products Slider</strong>
+          </label>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <label>Order:</label>
+            <input type="number" id="prodPopOrder" class="form-control" style="width: 80px;" value="1">
+          </div>
+        </div>
+        
+        <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="saveProduct()">Save Product</button>
+      </div>
+    </div>
+  </div>
+  <!-- Material Modal -->
+  <div id="matModal" class="modal-overlay">
+    <div class="modal-box" style="width: 400px;">
+      <button class="modal-close" onclick="closeMatModal()">&times;</button>
+      <div class="modal-body">
+        <h3 id="matModalTitle">Add Material</h3>
+        <input type="hidden" id="matId">
+        <div class="form-group">
+          <label>Material Name</label>
+          <input type="text" id="matName" class="form-control" required placeholder="e.g. HSS Steel, Carbide Tip">
+        </div>
+        <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveMaterial()">Save Material</button>
+      </div>
+    </div>
+  </div>
+  <!-- Sync Settings Modal -->
+  <div id="syncModal" class="modal-overlay">
+    <div class="modal-box" style="width: 500px;">
+      <button class="modal-close" onclick="closeSyncModal()">&times;</button>
+      <div class="modal-body">
+        <h3>GitHub Auto-Sync Settings</h3>
+        <p class="text-muted" style="margin-bottom:15px;">Configure your GitHub connection to allow the website to update itself automatically.</p>
+        
+        <div class="form-group">
+          <label>GitHub Username (Owner)</label>
+          <input type="text" id="ghUser" class="form-control" placeholder="e.g. WilliamYong">
+        </div>
+        <div class="form-group">
+          <label>Repository Name</label>
+          <input type="text" id="ghRepo" class="form-control" placeholder="e.g. uht-website">
+        </div>
+        <div class="form-group">
+          <label>Branch</label>
+          <input type="text" id="ghBranch" class="form-control" value="main">
+        </div>
+        <div class="form-group">
+          <label>Personal Access Token (PAT)</label>
+          <input type="password" id="ghToken" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          <small class="text-muted">Requires 'repo' scope. Stored securely in your browser.</small>
+        </div>
+        
+        <button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="saveSyncSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/data.js"></script>
+  <script>
+    let cats = [...CATEGORIES];
+    let prods = [...PRODUCTS];
+    let mats = [...MATERIAL_TYPES];
+    let logs = [...AUDIT_LOGS];
+
+    // Image Compression & Base64 Converter
+    function handleFileUpload(inputElemId, urlInputId, previewId) {
+      const fileInput = document.getElementById(inputElemId);
+      fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 600; // Compress images so data.js doesn't get too huge
+            let width = img.width;
+            let height = img.height;
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Convert to JPEG with 80% quality
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+            
+            // Set values
+            document.getElementById(urlInputId).value = dataUrl;
+            document.getElementById(previewId).src = dataUrl;
+            document.getElementById(previewId).style.display = 'block';
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    handleFileUpload('catImageFile', 'catImage', 'catImagePreview');
+    handleFileUpload('prodImageFile', 'prodImage', 'prodImagePreview');
+
+    // Tabs
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.target).classList.add('active');
+      });
+    });
+
+    function renderTables() {
+      const catBody = document.getElementById('catTableBody');
+      catBody.innerHTML = cats.map(c => `
+        <tr>
+          <td>${c.id}</td>
+          <td>${c.image ? `<img src="${c.image}">` : 'No Img'}</td>
+          <td><strong>${c.name}</strong></td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="editCat(${c.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteCat(${c.id})">Del</button>
+          </td>
+        </tr>
+      `).join('');
+
+      const matBody = document.getElementById('matTableBody');
+      matBody.innerHTML = mats.map(m => `
+        <tr>
+          <td>${m.id}</td>
+          <td><strong>${m.name}</strong></td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="editMat(${m.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteMat(${m.id})">Del</button>
+          </td>
+        </tr>
+      `).join('');
+
+      const prodBody = document.getElementById('prodTableBody');
+      prodBody.innerHTML = prods.map(p => {
+        const cName = cats.find(c => c.id == p.categoryId)?.name || 'Unknown';
+        return `
+        <tr>
+          <td>${p.id}</td>
+          <td>${p.image ? `<img src="${p.image}">` : 'No Img'}</td>
+          <td><strong>${p.name}</strong></td>
+          <td><span class="product-category-tag" style="font-size:0.75rem">${cName}</span></td>
+          <td>${p.price}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="editProd(${p.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteProd(${p.id})">Del</button>
+          </td>
+        </tr>
+      `}).join('');
+
+      const logBody = document.getElementById('logTableBody');
+      logBody.innerHTML = logs.slice().reverse().map(l => {
+        let badgeColor = 'background: #e0f2fe; color: #0369a1;';
+        if (l.action.includes('Added')) badgeColor = 'background: #dcfce7; color: #15803d;';
+        else if (l.action.includes('Deleted')) badgeColor = 'background: #fee2e2; color: #b91c1c;';
+        else if (l.action.includes('Import')) badgeColor = 'background: #fef3c7; color: #b45309;';
+
+        const detailText = l.details || l.change || '-';
+        return `
+        <tr>
+          <td style="font-size: 0.85rem; color: #64748b; white-space: nowrap;">${l.time}</td>
+          <td><span class="product-category-tag" style="font-size:0.75rem; ${badgeColor}">${l.action}</span></td>
+          <td><strong>${l.productName || l.target || '-'}</strong></td>
+          <td style="font-size: 0.85rem; color: #334155; white-space: pre-line; line-height: 1.4;">${detailText}</td>
+        </tr>
+      `}).join('');
+
+      const prodCatSel = document.getElementById('prodCategory');
+      prodCatSel.innerHTML = cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+      const prodMatSel = document.getElementById('prodMat');
+      prodMatSel.innerHTML = '<option value="">-- Select Material --</option>' + mats.map(m => `<option value="${m.name}">${m.name}</option>`).join('');
+    }
+
+    function showPreview(url, previewId) {
+      const p = document.getElementById(previewId);
+      if(url) { p.src = url; p.style.display = 'block'; }
+      else { p.src = ''; p.style.display = 'none'; }
+    }
+
+    // Category CRUD
+    function openCatModal() {
+      document.getElementById('catId').value = '';
+      document.getElementById('catName').value = '';
+      document.getElementById('catImage').value = '';
+      document.getElementById('catImageFile').value = '';
+      document.getElementById('catHomeOrder').value = (cats.length ? Math.max(...cats.map(c => c.homeOrder || 0)) + 1 : 1);
+      showPreview('', 'catImagePreview');
+      document.getElementById('catModalTitle').innerText = 'Add Category';
+      document.getElementById('catModal').classList.add('show');
+    }
+    function closeCatModal() { document.getElementById('catModal').classList.remove('show'); }
+    
+    function saveCategory() {
+      const id = document.getElementById('catId').value;
+      const name = document.getElementById('catName').value.trim();
+      const image = document.getElementById('catImage').value.trim();
+      const homeOrder = parseInt(document.getElementById('catHomeOrder').value) || 999;
+      
+      if(!name) return alert('Name is required');
+
+      if (id) {
+        const idx = cats.findIndex(c => c.id == id);
+        if(idx > -1) {
+          const old = cats[idx];
+          const diffs = [];
+          if (old.name !== name) diffs.push(`Name: "${old.name}" → "${name}"`);
+          if ((old.image || '') !== image) diffs.push(`Image updated`);
+          if ((old.homeOrder || 999) !== homeOrder) diffs.push(`Home Order: ${old.homeOrder || 999} → ${homeOrder}`);
+          cats[idx] = { ...cats[idx], name, image, homeOrder };
+          addLog('Edited Category', name, diffs.length ? diffs.join('\n') : 'No field changes');
+        }
+      } else {
+        const newId = cats.length ? Math.max(...cats.map(c => c.id)) + 1 : 1;
+        cats.push({ id: newId, name, image, homeOrder });
+        addLog('Added Category', name, `Category ID: ${newId} | Home Order: ${homeOrder}`);
+      }
+      closeCatModal();
+      renderTables();
+    }
+    
+    function editCat(id) {
+      const c = cats.find(c => c.id == id);
+      if(!c) return;
+      document.getElementById('catId').value = c.id;
+      document.getElementById('catName').value = c.name;
+      document.getElementById('catImage').value = c.image || '';
+      document.getElementById('catImageFile').value = '';
+      document.getElementById('catHomeOrder').value = c.homeOrder || 1;
+      showPreview(c.image, 'catImagePreview');
+      document.getElementById('catModalTitle').innerText = 'Edit Category';
+      document.getElementById('catModal').classList.add('show');
+    }
+    function deleteCat(id) {
+      const c = cats.find(c => c.id == id);
+      if(confirm('Delete this category?')) {
+        cats = cats.filter(c => c.id != id);
+        if(c) addLog('Deleted Category', c.name, `ID: ${id}`);
+        renderTables();
+      }
+    }
+
+    // Material CRUD
+    function openMatModal() {
+      document.getElementById('matId').value = '';
+      document.getElementById('matName').value = '';
+      document.getElementById('matModalTitle').innerText = 'Add Material';
+      document.getElementById('matModal').classList.add('show');
+    }
+    function closeMatModal() { document.getElementById('matModal').classList.remove('show'); }
+
+    function saveMaterial() {
+      const id = document.getElementById('matId').value;
+      const name = document.getElementById('matName').value.trim();
+      if(!name) return alert('Name is required');
+      if (id) {
+        const idx = mats.findIndex(m => m.id == id);
+        if(idx > -1) {
+          const oldName = mats[idx].name;
+          mats[idx].name = name;
+          addLog('Edited Material', name, `Name: "${oldName}" → "${name}"`);
+        }
+      } else {
+        const newId = mats.length ? Math.max(...mats.map(m => m.id)) + 1 : 1;
+        mats.push({ id: newId, name });
+        addLog('Added Material', name, `Material ID: ${newId}`);
+      }
+      closeMatModal();
+      renderTables();
+    }
+    function editMat(id) {
+      const m = mats.find(m => m.id == id);
+      if(!m) return;
+      document.getElementById('matId').value = m.id;
+      document.getElementById('matName').value = m.name;
+      document.getElementById('matModalTitle').innerText = 'Edit Material';
+      document.getElementById('matModal').classList.add('show');
+    }
+    function deleteMat(id) {
+      const m = mats.find(m => m.id == id);
+      if(confirm('Delete this material?')) {
+        mats = mats.filter(m => m.id != id);
+        if(m) addLog('Deleted Material', m.name, `ID: ${id}`);
+        renderTables();
+      }
+    }
+
+    // Audit Log Helper
+    function addLog(action, productName, details = '') {
+      const now = new Date();
+      const time = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+      logs.push({ time, action, productName, details });
+      renderTables();
+    }
+
+    // Product CRUD
+    function openProdModal() {
+      document.getElementById('prodId').value = '';
+      document.getElementById('prodName').value = '';
+      document.getElementById('prodDesc').value = '';
+      document.getElementById('prodPrice').value = 'Contact for price';
+      document.getElementById('prodImage').value = '';
+      document.getElementById('prodImageFile').value = '';
+      showPreview('', 'prodImagePreview');
+      document.getElementById('prodApp').value = '';
+      document.getElementById('prodMat').value = '';
+      document.getElementById('prodIsPopular').checked = false;
+      document.getElementById('prodPopOrder').value = '1';
+      document.getElementById('prodModalTitle').innerText = 'Add Product';
+      document.getElementById('prodModal').classList.add('show');
+    }
+    function closeProdModal() { document.getElementById('prodModal').classList.remove('show'); }
+
+    function saveProduct() {
+      const id = document.getElementById('prodId').value;
+      const name = document.getElementById('prodName').value.trim();
+      const catId = parseInt(document.getElementById('prodCategory').value);
+      const desc = document.getElementById('prodDesc').value.trim();
+      const price = document.getElementById('prodPrice').value.trim();
+      const image = document.getElementById('prodImage').value.trim();
+      const app = document.getElementById('prodApp').value.trim();
+      const mat = document.getElementById('prodMat').value.trim();
+      const isPopular = document.getElementById('prodIsPopular').checked;
+      const popularOrder = parseInt(document.getElementById('prodPopOrder').value) || 999;
+
+      if(!name || !catId) return alert('Name and Category are required');
+
+      const catObj = cats.find(c => c.id == catId);
+      const catName = catObj ? catObj.name : 'Unknown';
+
+      const pObj = { 
+        id: id ? parseInt(id) : (prods.length ? Math.max(...prods.map(p=>p.id))+1 : 1), 
+        categoryId: catId, name, description: desc, price, image, application: app, material: mat,
+        isPopular, popularOrder
+      };
+
+      if(id) {
+        const idx = prods.findIndex(p => p.id == id);
+        if(idx > -1) {
+          const old = prods[idx];
+          const diffs = [];
+
+          if (old.name !== name) diffs.push(`Name: "${old.name}" → "${name}"`);
+          if (old.categoryId !== catId) {
+            const oldCatName = cats.find(c => c.id == old.categoryId)?.name || 'Unknown';
+            diffs.push(`Category: "${oldCatName}" → "${catName}"`);
+          }
+          if ((old.price || '') !== price) diffs.push(`Price: "${old.price || 'None'}" → "${price || 'None'}"`);
+          if ((old.material || '') !== mat) diffs.push(`Material: "${old.material || 'None'}" → "${mat || 'None'}"`);
+          if ((old.description || '') !== desc) diffs.push(`Description updated`);
+          if ((old.application || '') !== app) diffs.push(`Application updated`);
+          if ((old.image || '') !== image) diffs.push(`Image updated`);
+          if (!!old.isPopular !== !!isPopular) diffs.push(`Popular: ${old.isPopular ? 'Yes' : 'No'} → ${isPopular ? 'Yes' : 'No'}`);
+          if ((old.popularOrder || 999) !== popularOrder) diffs.push(`Popular Order: ${old.popularOrder || 999} → ${popularOrder}`);
+
+          prods[idx] = pObj;
+          const detailStr = diffs.length > 0 ? diffs.join('\n') : 'No field changes';
+          addLog('Edited Product', name, detailStr);
+        }
+      } else {
+        prods.push(pObj);
+        const details = `Category: ${catName} | Price: ${price || 'Contact for price'} | Material: ${mat || 'N/A'}`;
+        addLog('Added Product', name, details);
+      }
+      closeProdModal();
+      renderTables();
+    }
+
+    function editProd(id) {
+      const p = prods.find(p => p.id == id);
+      if(!p) return;
+      document.getElementById('prodId').value = p.id;
+      document.getElementById('prodName').value = p.name;
+      document.getElementById('prodCategory').value = p.categoryId;
+      document.getElementById('prodDesc').value = p.description;
+      document.getElementById('prodPrice').value = p.price;
+      document.getElementById('prodImage').value = p.image;
+      document.getElementById('prodImageFile').value = '';
+      showPreview(p.image, 'prodImagePreview');
+      document.getElementById('prodApp').value = p.application || '';
+      document.getElementById('prodMat').value = p.material || '';
+      document.getElementById('prodIsPopular').checked = !!p.isPopular;
+      document.getElementById('prodPopOrder').value = p.popularOrder || 1;
+      document.getElementById('prodModalTitle').innerText = 'Edit Product';
+      document.getElementById('prodModal').classList.add('show');
+    }
+    function deleteProd(id) {
+      const p = prods.find(p => p.id == id);
+      if(confirm('Delete this product?')) {
+        prods = prods.filter(p => p.id != id);
+        if(p) {
+          const catName = cats.find(c => c.id == p.categoryId)?.name || 'Unknown';
+          addLog('Deleted Product', p.name, `ID: ${p.id} | Category: ${catName}`);
+        }
+        renderTables();
+      }
+    }
+
+    // Helper to generate data.js content string
+    function generateDataJS() {
+      return `// ============================================================
+// UNITED HARDWARE TRADING — Data Layer
+// ============================================================
+
+const CATEGORIES = ${JSON.stringify(cats, null, 2)};
+
+const PRODUCTS = ${JSON.stringify(prods, null, 2)};
+
+const MATERIAL_TYPES = ${JSON.stringify(mats, null, 2)};
+
+const AUDIT_LOGS = ${JSON.stringify(logs, null, 2)};
+`;
+    }
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const blob = new Blob([generateDataJS()], { type: 'application/javascript' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'data.js';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Excel Export
+    function exportToExcel() {
+      const rows = prods.map(p => ({
+        ID: p.id,
+        Name: p.name,
+        CategoryID: p.categoryId,
+        CategoryName: cats.find(c => c.id == p.categoryId)?.name || '',
+        Description: p.description || '',
+        Price: p.price || '',
+        Application: p.application || '',
+        Material: p.material || '',
+        IsPopular: p.isPopular ? 'Yes' : 'No',
+        PopularOrder: p.popularOrder || ''
+      }));
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Products');
+      XLSX.writeFile(wb, 'UHT_Products.xlsx');
+    }
+
+    // Excel Import
+    function importFromExcel(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const wb = XLSX.read(e.target.result, { type: 'array' });
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(ws);
+          if (!rows.length) return alert('Excel file is empty.');
+
+          let added = 0, updated = 0;
+          rows.forEach(row => {
+            const id = parseInt(row.ID);
+            const pObj = {
+              id: id || (prods.length ? Math.max(...prods.map(p=>p.id))+1 : 1),
+              categoryId: parseInt(row.CategoryID) || 1,
+              name: String(row.Name || '').trim(),
+              description: String(row.Description || '').trim(),
+              price: String(row.Price || 'Contact for price').trim(),
+              image: '',
+              application: String(row.Application || '').trim(),
+              material: String(row.Material || '').trim(),
+              isPopular: String(row.IsPopular || '').toLowerCase() === 'yes',
+              popularOrder: parseInt(row.PopularOrder) || 999
+            };
+            if (!pObj.name) return;
+
+            const existIdx = prods.findIndex(p => p.id === pObj.id);
+            if (existIdx > -1) {
+              pObj.image = prods[existIdx].image; // keep existing image
+              prods[existIdx] = pObj;
+              updated++;
+            } else {
+              prods.push(pObj);
+              added++;
+            }
+          });
+          addLog('Excel Import', 'Bulk Product Import', `Batch processed file "${file.name}":\nAdded ${added} new product(s)\nUpdated ${updated} existing product(s)`);
+          renderTables();
+          alert(`✅ Import complete! Added: ${added}, Updated: ${updated}`);
+        } catch(err) {
+          alert('❌ Error reading Excel file: ' + err.message);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+      event.target.value = '';
+    }
+
+    // --- GitHub Auto Sync Logic ---
+    function openSyncModal() {
+      document.getElementById('ghUser').value = localStorage.getItem('ghUser') || '';
+      document.getElementById('ghRepo').value = localStorage.getItem('ghRepo') || '';
+      document.getElementById('ghBranch').value = localStorage.getItem('ghBranch') || 'main';
+      document.getElementById('ghToken').value = localStorage.getItem('ghToken') || '';
+      document.getElementById('syncModal').classList.add('show');
+    }
+    function closeSyncModal() { document.getElementById('syncModal').classList.remove('show'); }
+    
+    function saveSyncSettings() {
+      localStorage.setItem('ghUser', document.getElementById('ghUser').value.trim());
+      localStorage.setItem('ghRepo', document.getElementById('ghRepo').value.trim());
+      localStorage.setItem('ghBranch', document.getElementById('ghBranch').value.trim() || 'main');
+      localStorage.setItem('ghToken', document.getElementById('ghToken').value.trim());
+      alert('Settings saved locally.');
+      closeSyncModal();
+    }
+
+    function b64EncodeUnicode(str) {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function toSolidBytes(match, p1) {
+        return String.fromCharCode('0x' + p1);
+      }));
+    }
+
+    async function autoSync() {
+      const ghUser = localStorage.getItem('ghUser');
+      const ghRepo = localStorage.getItem('ghRepo');
+      const ghToken = localStorage.getItem('ghToken');
+      const ghBranch = localStorage.getItem('ghBranch') || 'main';
+
+      if(!ghUser || !ghRepo || !ghToken) {
+        alert("Please configure Sync Settings first.");
+        openSyncModal();
+        return;
+      }
+
+      const autoSyncBtn = document.getElementById('autoSyncBtn');
+      autoSyncBtn.disabled = true;
+      autoSyncBtn.innerText = "⏳ Syncing...";
+
+      const jsContent = generateDataJS();
+
+      const filePath = 'assets/js/data.js';
+      const apiUrl = `https://api.github.com/repos/${ghUser}/${ghRepo}/contents/${filePath}`;
+      
+      try {
+        let sha = '';
+        const getRes = await fetch(apiUrl + `?ref=${ghBranch}`, {
+          headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        
+        if(getRes.ok) {
+          const fileData = await getRes.json();
+          sha = fileData.sha;
+        } else if(getRes.status !== 404) {
+          throw new Error("Failed to get file info. Check your Repo/Branch name and Token.");
+        }
+
+        const putRes = await fetch(apiUrl, {
+          method: 'PUT',
+          headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: "Auto-sync data.js from Admin Panel",
+            content: b64EncodeUnicode(jsContent),
+            sha: sha || undefined,
+            branch: ghBranch
+          })
+        });
+
+        if(putRes.ok) {
+          alert("✅ Success! Your website is updating in the background. Please wait ~1 minute and refresh your live site.");
+        } else {
+          const errorData = await putRes.json();
+          throw new Error(errorData.message || "Failed to push to GitHub.");
+        }
+
+      } catch (error) {
+        alert("❌ Sync Error: " + error.message);
+      } finally {
+        autoSyncBtn.disabled = false;
+        autoSyncBtn.innerText = "🚀 Auto Sync to Live Site";
+      }
+    }
+
+    renderTables();
+  </script>
+</body>
+</html>
