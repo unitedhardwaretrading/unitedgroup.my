@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - UNITED HARDWARE TRADING</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    body { background: #f8fafc; }
+    .admin-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+    .admin-header h1 { font-size: 2rem; color: var(--dark); }
+    .export-btn { font-size: 1.1rem; padding: 14px 24px; }
+    .image-preview { margin-top: 10px; max-width: 120px; max-height: 120px; border-radius: 8px; display: none; object-fit: cover; border: 1px solid var(--line); }
+
+    /* Quick-pick chips (scene / brand / details templates) */
+    .quick-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .quick-chip {
+      border: 1px solid #cbd5e1; background: #f8fafc; color: #334155;
+      border-radius: 999px; padding: 4px 12px; font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; transition: all .15s ease; line-height: 1.5;
+    }
+    .quick-chip:hover { border-color: var(--primary); color: var(--primary); background: #eef4ff; }
+    .quick-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .quick-chip.tpl { border-style: dashed; background: #fff; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 640px) { .form-row-2 { grid-template-columns: 1fr; } }
+    .hint { display: block; margin-top: 4px; font-size: 0.78rem; color: #64748b; }
+    .tag-brand { background: #fef3c7 !important; color: #92400e !important; }
+    .admin-filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+    .admin-filter-bar .form-control { width: auto; flex: 1; min-width: 160px; }
+    .admin-table td.details-cell { font-size: 0.8rem; color: #475569; white-space: pre-line; max-width: 260px; }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <img src="logo.jpeg" alt="United Hardware Trading">
+        <span>UNITED HARDWARE TRADING - ADMIN</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Back to Website</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="admin-container">
+    
+    <div class="export-bar">
+      <div>
+        <h3>Data Management</h3>
+        <p class="text-muted">Changes made here are temporary until you export or sync to GitHub.</p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button id="syncSettingsBtn" class="btn btn-outline export-btn" onclick="openSyncModal()">⚙️ Sync Settings</button>
+        <button id="exportExcelBtn" class="btn btn-outline export-btn" onclick="exportToExcel()">📊 Export Excel</button>
+        <label class="btn btn-outline export-btn" style="cursor: pointer;">
+          📂 Import Excel
+          <input type="file" id="importExcelFile" accept=".xlsx, .xls" style="display: none;" onchange="importFromExcel(event)">
+        </label>
+        <button id="exportBtn" class="btn btn-outline export-btn">💾 Manual Export (JS)</button>
+        <button id="autoSyncBtn" class="btn btn-success export-btn" onclick="autoSync()">🚀 Auto Sync to Live Site</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="admin-tabs">
+        <div class="admin-tab active" data-target="prodTab">Products</div>
+        <div class="admin-tab" data-target="catTab">Scenes</div>
+        <div class="admin-tab" data-target="brandTab">Brands</div>
+        <div class="admin-tab" data-target="logTab">Audit Log</div>
+      </div>
+
+      <div id="catTab" class="admin-panel">
+        <div class="admin-header">
+          <div>
+            <h3>Manage Scenes (Categories)</h3>
+            <small class="text-muted">e.g. Bathroom, Factory, Stationery, Civil &amp; Structural. Products without a valid scene are shown under <strong>Others</strong>.</small>
+          </div>
+          <button class="btn btn-primary" onclick="openCatModal()">+ Add Scene</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Image / Icon</th>
+                <th>Scene Name</th>
+                <th>Products</th>
+                <th>Home Order</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="catTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="brandTab" class="admin-panel">
+        <div class="admin-header">
+          <div>
+            <h3>Manage Brands</h3>
+            <small class="text-muted">Brands listed here appear as quick-pick options when adding a product. Products without a brand are tagged <strong>Others</strong>.</small>
+          </div>
+          <button class="btn btn-primary" onclick="openBrandModal()">+ Add Brand</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Brand Name</th>
+                <th>Products</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="brandTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="prodTab" class="admin-panel active">
+        <div class="admin-header">
+          <h3>Manage Products</h3>
+          <button class="btn btn-primary" onclick="openProdModal()">+ Add Product</button>
+        </div>
+        <div class="admin-filter-bar">
+          <input type="text" id="prodTableSearch" class="form-control" placeholder="🔍 Search product name...">
+          <select id="prodTableScene" class="form-control"></select>
+          <select id="prodTableBrand" class="form-control"></select>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Scene</th>
+                <th>Brand</th>
+                <th>Details</th>
+                <th>Price</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="prodTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="logTab" class="admin-panel">
+        <div class="admin-header">
+          <h3>Audit Log</h3>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 170px;">Time</th>
+                <th style="width: 130px;">Action</th>
+                <th style="width: 200px;">Target Item</th>
+                <th>Detailed Changes</th>
+              </tr>
+            </thead>
+            <tbody id="logTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Category Modal -->
+  <div id="catModal" class="modal-overlay">
+    <div class="modal-box" style="width: 500px;">
+      <button class="modal-close" onclick="closeCatModal()">&times;</button>
+      <div class="modal-body">
+        <h3 id="catModalTitle">Add Scene</h3>
+        <input type="hidden" id="catId">
+        <div class="form-group">
+          <label>Scene Name</label>
+          <input type="text" id="catName" class="form-control" list="sceneSuggestList" placeholder="e.g. Bathroom, Factory, Stationery, Civil & Structural" required>
+          <datalist id="sceneSuggestList">
+            <option value="Bathroom"></option>
+            <option value="Factory"></option>
+            <option value="Stationery"></option>
+            <option value="Civil & Structural"></option>
+            <option value="Kitchen"></option>
+            <option value="Electrical"></option>
+            <option value="Plumbing"></option>
+            <option value="Office"></option>
+            <option value="Others"></option>
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label>Icon (emoji, shown when there is no image)</label>
+          <input type="text" id="catIcon" class="form-control" placeholder="e.g. 🛁 🏭 ✏️ 🏗️" maxlength="8">
+          <div class="quick-chips" id="catIconChips"></div>
+        </div>
+        <div class="form-group">
+          <label>Upload Image</label>
+          <input type="file" id="catImageFile" accept="image/*" class="form-control" style="margin-bottom: 8px;">
+          <small class="text-muted">Or enter an image URL / path directly:</small>
+          <input type="text" id="catImage" class="form-control" placeholder="https://... or uploads/img.jpg">
+          <img id="catImagePreview" class="image-preview">
+        </div>
+        <div class="form-group">
+          <label>Home Page Display Order</label>
+          <input type="number" id="catHomeOrder" class="form-control" value="1" min="1">
+          <small class="text-muted">Lower number = appears first in the category slider on the home page.</small>
+        </div>
+        <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveCategory()">Save Scene</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div id="prodModal" class="modal-overlay">
+    <div class="modal-box" style="width: 600px;">
+      <button class="modal-close" onclick="closeProdModal()">&times;</button>
+      <div class="modal-body">
+        <h3 id="prodModalTitle">Add Product</h3>
+        <input type="hidden" id="prodId">
+        
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" id="prodName" class="form-control" required>
+        </div>
+
+        <!-- Tag 1: Scenes (Multi-select) -->
+        <div class="form-group">
+          <label>Scenes / Categories (Tag 1 — can choose more than one)</label>
+          <div class="quick-chips" id="prodSceneChips" style="margin-top: 4px;"></div>
+          <span class="hint">Click to toggle one or more scenes. Leave all unchecked for <strong>Others</strong>.</span>
+        </div>
+
+        <!-- Tag 2: Brand -->
+        <div class="form-group">
+          <label>Brand (Tag 2)</label>
+          <input type="text" id="prodBrand" class="form-control" list="brandSuggestList" placeholder="Type or pick a brand — leave empty for Others" autocomplete="off">
+          <datalist id="brandSuggestList"></datalist>
+          <div class="quick-chips" id="prodBrandChips"></div>
+          <span class="hint">Typing a new brand name will add it to the Brands list automatically. Empty = <strong>Others</strong>.</span>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="prodDesc" class="form-control" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Price</label>
+          <input type="text" id="prodPrice" class="form-control" value="Contact for price" list="priceSuggestList">
+          <datalist id="priceSuggestList">
+            <option value="Contact for price"></option>
+            <option value="RM "></option>
+          </datalist>
+        </div>
+        
+        <div class="form-group">
+          <label>Upload Image</label>
+          <input type="file" id="prodImageFile" accept="image/*" class="form-control" style="margin-bottom: 8px;">
+          <small class="text-muted">Or enter an image URL / path directly:</small>
+          <input type="text" id="prodImage" class="form-control" placeholder="https://... or uploads/img.jpg">
+          <img id="prodImagePreview" class="image-preview">
+        </div>
+
+        <div class="form-group">
+          <label>Application / Usage</label>
+          <input type="text" id="prodApp" class="form-control" list="appSuggestList">
+          <datalist id="appSuggestList"></datalist>
+        </div>
+        <div class="form-group">
+          <label>Details</label>
+          <textarea id="prodDetails" class="form-control" rows="4" placeholder="Size: M3 – M24&#10;Length: 10mm – 200mm&#10;Material: Stainless Steel 304"></textarea>
+          <div class="quick-chips" id="prodDetailTpls">
+            <button type="button" class="quick-chip tpl" data-tpl="Size: M3 – M24">+ Size range</button>
+            <button type="button" class="quick-chip tpl" data-tpl="Length: 10mm – 200mm">+ Length range</button>
+            <button type="button" class="quick-chip tpl" data-tpl="Diameter: 3mm – 25mm">+ Diameter</button>
+            <button type="button" class="quick-chip tpl" data-tpl="Material: ">+ Material</button>
+            <button type="button" class="quick-chip tpl" data-tpl="Finish: Zinc Plated / Black Oxide">+ Finish</button>
+            <button type="button" class="quick-chip tpl" data-tpl="Grade: 4.8 / 8.8 / 10.9">+ Grade</button>
+            <button type="button" class="quick-chip tpl" data-tpl="Packing: per box / per kg">+ Packing</button>
+          </div>
+          <span class="hint">No need to list every size — just write the range (e.g. <em>Size: M3 – M24</em>). Each line is shown as one row on the website.</span>
+        </div>
+        <div class="form-group" style="display: flex; gap: 20px; align-items: center; margin-top: 15px;">
+          <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="prodIsPopular" style="width: 20px; height: 20px;"> 
+            <strong>Show in Popular Products Slider</strong>
+          </label>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <label>Order:</label>
+            <input type="number" id="prodPopOrder" class="form-control" style="width: 80px;" value="1">
+          </div>
+        </div>
+        
+        <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="saveProduct()">Save Product</button>
+      </div>
+    </div>
+  </div>
+  <!-- Brand Modal -->
+  <div id="brandModal" class="modal-overlay">
+    <div class="modal-box" style="width: 400px;">
+      <button class="modal-close" onclick="closeBrandModal()">&times;</button>
+      <div class="modal-body">
+        <h3 id="brandModalTitle">Add Brand</h3>
+        <input type="hidden" id="brandId">
+        <div class="form-group">
+          <label>Brand Name</label>
+          <input type="text" id="brandName" class="form-control" required placeholder="e.g. Bosch, Makita, Stanley">
+        </div>
+        <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="saveBrand()">Save Brand</button>
+      </div>
+    </div>
+  </div>
+  <!-- Sync Settings Modal -->
+  <div id="syncModal" class="modal-overlay">
+    <div class="modal-box" style="width: 500px;">
+      <button class="modal-close" onclick="closeSyncModal()">&times;</button>
+      <div class="modal-body">
+        <h3>GitHub Auto-Sync Settings</h3>
+        <p class="text-muted" style="margin-bottom:15px;">Configure your GitHub connection to allow the website to update itself automatically.</p>
+        
+        <div class="form-group">
+          <label>GitHub Username (Owner)</label>
+          <input type="text" id="ghUser" class="form-control" placeholder="e.g. WilliamYong">
+        </div>
+        <div class="form-group">
+          <label>Repository Name</label>
+          <input type="text" id="ghRepo" class="form-control" placeholder="e.g. uht-website">
+        </div>
+        <div class="form-group">
+          <label>Branch</label>
+          <input type="text" id="ghBranch" class="form-control" value="main">
+        </div>
+        <div class="form-group">
+          <label>Personal Access Token (PAT)</label>
+          <input type="password" id="ghToken" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          <small class="text-muted">Requires 'repo' scope. Stored securely in your browser.</small>
+        </div>
+        
+        <button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="saveSyncSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/data.js"></script>
+  <script>
+    // ============================================================
+    // DATA LOAD (backward compatible with older data.js versions)
+    //  - CATEGORIES = Scenes (Bathroom, Factory, Stationery, Civil & Structural, Others)
+    //  - Each product has 2 tags: categoryId (scene) + brand ("Others" when empty)
+    //  - Old "material" field is migrated into "details"
+    // ============================================================
+    const OTHERS = 'Others';
+
+    function normalizeProduct(p) {
+      const o = { ...p };
+      if (o.details === undefined || o.details === null) {
+        o.details = o.material ? `Material: ${o.material}` : '';
+      }
+      delete o.material;
+      o.brand = (o.brand || '').toString().trim() || OTHERS;
+      // Support multiple categories (categoryIds array) while keeping categoryId for backward compatibility
+      let ids = Array.isArray(o.categoryIds) ? o.categoryIds.map(Number).filter(n => !isNaN(n)) : [];
+      if (!ids.length && o.categoryId !== undefined && o.categoryId !== null && o.categoryId !== '') {
+        const n = Number(o.categoryId);
+        if (!isNaN(n)) ids = [n];
+      }
+      o.categoryIds = [...new Set(ids)];
+      o.categoryId = o.categoryIds[0] ?? null;
+      return o;
+    }
+
+    let cats   = (typeof CATEGORIES !== 'undefined' ? CATEGORIES : []).map(c => ({ ...c }));
+    let prods  = (typeof PRODUCTS   !== 'undefined' ? PRODUCTS   : []).map(normalizeProduct);
+    let brands = (typeof BRANDS     !== 'undefined' ? BRANDS     : []).map(b => ({ ...b }));
+    let logs   = [...(typeof AUDIT_LOGS !== 'undefined' ? AUDIT_LOGS : [])];
+
+    // Make sure an "Others" scene always exists as the fallback
+    if (!cats.some(c => c.isFallback || String(c.name).toLowerCase() === 'others')) {
+      cats.push({ id: cats.length ? Math.max(...cats.map(c => c.id)) + 1 : 1, name: OTHERS, icon: '📦', image: '', homeOrder: 99, isFallback: true });
+    }
+
+
+    // Image Compression & Base64 Converter
+    function handleFileUpload(inputElemId, urlInputId, previewId) {
+      const fileInput = document.getElementById(inputElemId);
+      fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 600; // Compress images so data.js doesn't get too huge
+            let width = img.width;
+            let height = img.height;
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Convert to JPEG with 80% quality
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+            
+            // Set values
+            document.getElementById(urlInputId).value = dataUrl;
+            document.getElementById(previewId).src = dataUrl;
+            document.getElementById(previewId).style.display = 'block';
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    handleFileUpload('catImageFile', 'catImage', 'catImagePreview');
+    handleFileUpload('prodImageFile', 'prodImage', 'prodImagePreview');
+
+    // Tabs
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.target).classList.add('active');
+      });
+    });
+
+    // ============================================================
+    // HELPERS
+    // ============================================================
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    }
+    function getOthersCat() {
+      return cats.find(c => c.isFallback) || cats.find(c => String(c.name).toLowerCase() === 'others');
+    }
+    function resolveSceneIds(p) {
+      const raw = Array.isArray(p.categoryIds) && p.categoryIds.length
+        ? p.categoryIds
+        : (p.categoryId !== undefined && p.categoryId !== null ? [p.categoryId] : []);
+      const valid = [...new Set(raw.map(Number).filter(id => cats.some(c => c.id == id)))];
+      if (valid.length) return valid;
+      const o = getOthersCat();
+      return o ? [o.id] : [];
+    }
+    function sceneName(id) {
+      return cats.find(c => c.id == id)?.name || OTHERS;
+    }
+    function sceneNamesList(ids) {
+      return ids.map(sceneName).join(', ') || OTHERS;
+    }
+    let modalSceneIds = [];
+    function sortedCats() {
+      return [...cats].sort((a, b) => (a.homeOrder || 999) - (b.homeOrder || 999));
+    }
+    // Normalize a brand to its canonical spelling (case-insensitive match) or "Others"
+    function normBrand(name) {
+      const n = (name || '').toString().trim();
+      if (!n || n.toLowerCase() === 'others' || n.toLowerCase() === 'other') return OTHERS;
+      const existing = brands.find(b => b.name.toLowerCase() === n.toLowerCase())
+        || prods.map(p => ({ name: p.brand })).find(b => (b.name || '').toLowerCase() === n.toLowerCase());
+      return existing ? existing.name : n;
+    }
+    function ensureBrand(name) {
+      if (!name || name === OTHERS) return;
+      if (!brands.some(b => b.name.toLowerCase() === name.toLowerCase())) {
+        const newId = brands.length ? Math.max(...brands.map(b => b.id)) + 1 : 1;
+        brands.push({ id: newId, name });
+      }
+    }
+    function brandUsage() {
+      const map = {};
+      prods.forEach(p => { map[p.brand] = (map[p.brand] || 0) + 1; });
+      return map;
+    }
+    function allBrandNames() {
+      const usage = brandUsage();
+      const set = new Set(brands.map(b => b.name));
+      prods.forEach(p => { if (p.brand && p.brand !== OTHERS) set.add(p.brand); });
+      return [...set].sort((a, b) => (usage[b] || 0) - (usage[a] || 0) || a.localeCompare(b));
+    }
+
+    // ============================================================
+    // RENDER
+    // ============================================================
+    function renderTables() {
+      const usage = brandUsage();
+
+      // --- Scenes table ---
+      const catBody = document.getElementById('catTableBody');
+      catBody.innerHTML = sortedCats().map(c => {
+        const count = prods.filter(p => resolveSceneIds(p).includes(Number(c.id))).length;
+        const isFallback = getOthersCat()?.id === c.id;
+        return `
+        <tr>
+          <td>${c.id}</td>
+          <td>${c.image ? `<img src="${c.image}">` : `<span style="font-size:1.6rem">${c.icon || '🔧'}</span>`}</td>
+          <td><strong>${escapeHtml(c.name)}</strong>${isFallback ? ' <span class="product-category-tag" style="font-size:0.7rem">Fallback</span>' : ''}</td>
+          <td>${count}</td>
+          <td>${c.homeOrder || '-'}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="editCat(${c.id})">Edit</button>
+            ${isFallback ? '' : `<button class="btn btn-danger btn-sm" onclick="deleteCat(${c.id})">Del</button>`}
+          </td>
+        </tr>`;
+      }).join('');
+
+      // --- Brands table ---
+      const brandBody = document.getElementById('brandTableBody');
+      brandBody.innerHTML = [...brands].sort((a, b) => a.name.localeCompare(b.name)).map(b => `
+        <tr>
+          <td>${b.id}</td>
+          <td><strong>${escapeHtml(b.name)}</strong></td>
+          <td>${usage[b.name] || 0}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="editBrand(${b.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteBrand(${b.id})">Del</button>
+          </td>
+        </tr>
+      `).join('') + `
+        <tr style="background:#f8fafc">
+          <td>-</td>
+          <td><strong>${OTHERS}</strong> <small class="text-muted">(default when no brand)</small></td>
+          <td>${usage[OTHERS] || 0}</td>
+          <td><small class="text-muted">Built-in</small></td>
+        </tr>`;
+
+      // --- Audit log ---
+      const logBody = document.getElementById('logTableBody');
+      logBody.innerHTML = logs.slice().reverse().map(l => {
+        let badgeColor = 'background: #e0f2fe; color: #0369a1;';
+        if (l.action.includes('Added')) badgeColor = 'background: #dcfce7; color: #15803d;';
+        else if (l.action.includes('Deleted')) badgeColor = 'background: #fee2e2; color: #b91c1c;';
+        else if (l.action.includes('Import') || l.action.includes('Migration')) badgeColor = 'background: #fef3c7; color: #b45309;';
+
+        const detailText = l.details || l.change || '-';
+        return `
+        <tr>
+          <td style="font-size: 0.85rem; color: #64748b; white-space: nowrap;">${l.time}</td>
+          <td><span class="product-category-tag" style="font-size:0.75rem; ${badgeColor}">${l.action}</span></td>
+          <td><strong>${escapeHtml(l.productName || l.target || '-')}</strong></td>
+          <td style="font-size: 0.85rem; color: #334155; white-space: pre-line; line-height: 1.4;">${escapeHtml(detailText)}</td>
+        </tr>
+      `}).join('');
+
+      // --- Datalists & quick chips ---
+      document.getElementById('brandSuggestList').innerHTML =
+        [OTHERS, ...allBrandNames()].map(n => `<option value="${escapeHtml(n)}"></option>`).join('');
+
+      const apps = [...new Set(prods.map(p => (p.application || '').trim()).filter(Boolean))].sort();
+      document.getElementById('appSuggestList').innerHTML = apps.map(a => `<option value="${escapeHtml(a)}"></option>`).join('');
+
+      // Product table filters
+      const fScene = document.getElementById('prodTableScene');
+      const fBrand = document.getElementById('prodTableBrand');
+      const keepFS = fScene.value, keepFB = fBrand.value;
+      fScene.innerHTML = '<option value="">All Scenes</option>' + sortedCats().map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
+      fBrand.innerHTML = '<option value="">All Brands</option>' + [...allBrandNames(), OTHERS].map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+      fScene.value = [...fScene.options].some(o => o.value === keepFS) ? keepFS : '';
+      fBrand.value = [...fBrand.options].some(o => o.value === keepFB) ? keepFB : '';
+
+      renderSceneChips();
+      renderBrandChips();
+      renderProdTable();
+    }
+
+    function renderProdTable() {
+      const q = document.getElementById('prodTableSearch').value.toLowerCase().trim();
+      const fs = document.getElementById('prodTableScene').value;
+      const fb = document.getElementById('prodTableBrand').value;
+
+      const rows = prods.filter(p => {
+        if (q && !p.name.toLowerCase().includes(q)) return false;
+        if (fs && !resolveSceneIds(p).includes(Number(fs))) return false;
+        if (fb && p.brand !== fb) return false;
+        return true;
+      });
+
+      const prodBody = document.getElementById('prodTableBody');
+      if (!rows.length) {
+        prodBody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#64748b; padding:24px;">No products match.</td></tr>`;
+        return;
+      }
+      prodBody.innerHTML = rows.map(p => {
+        const sceneBadges = resolveSceneIds(p).map(sid =>
+          `<span class="product-category-tag" style="font-size:0.75rem">${escapeHtml(sceneName(sid))}</span>`
+        ).join(' ');
+        return `
+        <tr>
+          <td>${p.id}</td>
+          <td>${p.image ? `<img src="${p.image}">` : 'No Img'}</td>
+          <td><strong>${escapeHtml(p.name)}</strong></td>
+          <td><div style="display:flex;flex-wrap:wrap;gap:4px;">${sceneBadges}</div></td>
+          <td><span class="product-category-tag tag-brand" style="font-size:0.75rem">${escapeHtml(p.brand)}</span></td>
+          <td class="details-cell">${escapeHtml(p.details || '-')}</td>
+          <td>${escapeHtml(p.price)}</td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="editProd(${p.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteProd(${p.id})">Del</button>
+          </td>
+        </tr>
+      `;}).join('');
+    }
+
+    document.getElementById('prodTableSearch').addEventListener('input', renderProdTable);
+    document.getElementById('prodTableScene').addEventListener('change', renderProdTable);
+    document.getElementById('prodTableBrand').addEventListener('change', renderProdTable);
+
+    // --- Quick chips: Scenes (Multi-select toggle) ---
+    function renderSceneChips() {
+      document.getElementById('prodSceneChips').innerHTML = sortedCats().map(c => {
+        const isOn = modalSceneIds.includes(Number(c.id));
+        return `<button type="button" class="quick-chip ${isOn ? 'active' : ''}" data-scene="${c.id}">${isOn ? '✓ ' : ''}${c.icon ? c.icon + ' ' : ''}${escapeHtml(c.name)}</button>`;
+      }).join('');
+    }
+    document.getElementById('prodSceneChips').addEventListener('click', e => {
+      const btn = e.target.closest('[data-scene]');
+      if (!btn) return;
+      const cid = Number(btn.dataset.scene);
+      const others = getOthersCat();
+      const othersId = others ? Number(others.id) : null;
+
+      if (cid === othersId) {
+        // Clicking Others selects only Others
+        modalSceneIds = [othersId];
+      } else {
+        if (modalSceneIds.includes(cid)) {
+          modalSceneIds = modalSceneIds.filter(id => id !== cid);
+        } else {
+          modalSceneIds = [...modalSceneIds.filter(id => id !== othersId), cid];
+        }
+        if (!modalSceneIds.length && othersId !== null) {
+          modalSceneIds = [othersId];
+        }
+      }
+      renderSceneChips();
+    });
+
+    // --- Quick chips: Brand ---
+    function renderBrandChips() {
+      const cur = normBrand(document.getElementById('prodBrand').value);
+      const top = allBrandNames().slice(0, 14);
+      document.getElementById('prodBrandChips').innerHTML = [OTHERS, ...top].map(n =>
+        `<button type="button" class="quick-chip ${cur === n ? 'active' : ''}" data-brand="${escapeHtml(n)}">${escapeHtml(n)}</button>`
+      ).join('');
+    }
+    document.getElementById('prodBrandChips').addEventListener('click', e => {
+      const btn = e.target.closest('[data-brand]');
+      if (!btn) return;
+      document.getElementById('prodBrand').value = btn.dataset.brand;
+      renderBrandChips();
+    });
+    document.getElementById('prodBrand').addEventListener('input', renderBrandChips);
+
+    // --- Quick templates: Details ---
+    document.getElementById('prodDetailTpls').addEventListener('click', e => {
+      const btn = e.target.closest('[data-tpl]');
+      if (!btn) return;
+      const ta = document.getElementById('prodDetails');
+      const line = btn.dataset.tpl;
+      ta.value = ta.value.trim() ? ta.value.replace(/\s+$/, '') + '\n' + line : line;
+      ta.focus();
+      ta.setSelectionRange(ta.value.length, ta.value.length);
+    });
+
+    // --- Quick chips: Scene icon ---
+    const ICON_CHOICES = ['🛁', '🏭', '✏️', '🏗️', '🔩', '🔧', '🧰', '⚡', '🚰', '🍳', '🏢', '🏠', '🌿', '📦'];
+    document.getElementById('catIconChips').innerHTML = ICON_CHOICES.map(i => `<button type="button" class="quick-chip" data-icon="${i}">${i}</button>`).join('');
+    document.getElementById('catIconChips').addEventListener('click', e => {
+      const btn = e.target.closest('[data-icon]');
+      if (btn) document.getElementById('catIcon').value = btn.dataset.icon;
+    });
+
+    function showPreview(url, previewId) {
+      const p = document.getElementById(previewId);
+      if(url) { p.src = url; p.style.display = 'block'; }
+      else { p.src = ''; p.style.display = 'none'; }
+    }
+
+    // ============================================================
+    // SCENE (Category) CRUD
+    // ============================================================
+    function openCatModal() {
+      document.getElementById('catId').value = '';
+      document.getElementById('catName').value = '';
+      document.getElementById('catIcon').value = '';
+      document.getElementById('catImage').value = '';
+      document.getElementById('catImageFile').value = '';
+      document.getElementById('catHomeOrder').value = (cats.length ? Math.max(...cats.filter(c => !c.isFallback).map(c => c.homeOrder || 0), 0) + 1 : 1);
+      showPreview('', 'catImagePreview');
+      document.getElementById('catModalTitle').innerText = 'Add Scene';
+      document.getElementById('catModal').classList.add('show');
+    }
+    function closeCatModal() { document.getElementById('catModal').classList.remove('show'); }
+    
+    function saveCategory() {
+      const id = document.getElementById('catId').value;
+      const name = document.getElementById('catName').value.trim();
+      const icon = document.getElementById('catIcon').value.trim();
+      const image = document.getElementById('catImage').value.trim();
+      const homeOrder = parseInt(document.getElementById('catHomeOrder').value) || 999;
+      
+      if(!name) return alert('Scene name is required');
+      if (cats.some(c => c.name.toLowerCase() === name.toLowerCase() && String(c.id) !== String(id))) {
+        return alert(`Scene "${name}" already exists.`);
+      }
+
+      if (id) {
+        const idx = cats.findIndex(c => c.id == id);
+        if(idx > -1) {
+          const old = cats[idx];
+          const diffs = [];
+          if (old.name !== name) diffs.push(`Name: "${old.name}" → "${name}"`);
+          if ((old.icon || '') !== icon) diffs.push(`Icon: ${old.icon || 'None'} → ${icon || 'None'}`);
+          if ((old.image || '') !== image) diffs.push(`Image updated`);
+          if ((old.homeOrder || 999) !== homeOrder) diffs.push(`Home Order: ${old.homeOrder || 999} → ${homeOrder}`);
+          cats[idx] = { ...cats[idx], name, icon, image, homeOrder };
+          addLog('Edited Scene', name, diffs.length ? diffs.join('\n') : 'No field changes');
+        }
+      } else {
+        const newId = cats.length ? Math.max(...cats.map(c => c.id)) + 1 : 1;
+        cats.push({ id: newId, name, icon, image, homeOrder });
+        addLog('Added Scene', name, `Scene ID: ${newId} | Home Order: ${homeOrder}`);
+      }
+      closeCatModal();
+      renderTables();
+    }
+    
+    function editCat(id) {
+      const c = cats.find(c => c.id == id);
+      if(!c) return;
+      document.getElementById('catId').value = c.id;
+      document.getElementById('catName').value = c.name;
+      document.getElementById('catIcon').value = c.icon || '';
+      document.getElementById('catImage').value = c.image || '';
+      document.getElementById('catImageFile').value = '';
+      document.getElementById('catHomeOrder').value = c.homeOrder || 1;
+      showPreview(c.image, 'catImagePreview');
+      document.getElementById('catModalTitle').innerText = 'Edit Scene';
+      document.getElementById('catModal').classList.add('show');
+    }
+    function deleteCat(id) {
+      const c = cats.find(c => c.id == id);
+      const others = getOthersCat();
+      if (!c) return;
+      if (others && others.id === c.id) return alert('"Others" is the fallback scene and cannot be deleted.');
+      const affected = prods.filter(p => resolveSceneIds(p).includes(Number(id)));
+      const msg = affected.length
+        ? `Delete scene "${c.name}"?\n${affected.length} product(s) will have this scene removed (moved to "Others" if none left).`
+        : `Delete scene "${c.name}"?`;
+      if(confirm(msg)) {
+        cats = cats.filter(c => c.id != id);
+        affected.forEach(p => {
+          const remaining = resolveSceneIds(p).filter(sid => sid !== Number(id));
+          p.categoryIds = remaining.length ? remaining : (others ? [others.id] : []);
+          p.categoryId = p.categoryIds[0] ?? null;
+        });
+        addLog('Deleted Scene', c.name, `ID: ${id}${affected.length ? ` | ${affected.length} product(s) updated` : ''}`);
+        renderTables();
+      }
+    }
+
+    // ============================================================
+    // BRAND CRUD
+    // ============================================================
+    function openBrandModal() {
+      document.getElementById('brandId').value = '';
+      document.getElementById('brandName').value = '';
+      document.getElementById('brandModalTitle').innerText = 'Add Brand';
+      document.getElementById('brandModal').classList.add('show');
+    }
+    function closeBrandModal() { document.getElementById('brandModal').classList.remove('show'); }
+
+    function saveBrand() {
+      const id = document.getElementById('brandId').value;
+      const name = document.getElementById('brandName').value.trim();
+      if (!name) return alert('Brand name is required');
+      if (name.toLowerCase() === 'others' || name.toLowerCase() === 'other') return alert('"Others" is built-in and does not need to be added.');
+      if (brands.some(b => b.name.toLowerCase() === name.toLowerCase() && String(b.id) !== String(id))) {
+        return alert(`Brand "${name}" already exists.`);
+      }
+      if (id) {
+        const idx = brands.findIndex(b => b.id == id);
+        if (idx > -1) {
+          const oldName = brands[idx].name;
+          brands[idx].name = name;
+          let moved = 0;
+          prods.forEach(p => { if (p.brand === oldName) { p.brand = name; moved++; } });
+          addLog('Edited Brand', name, `Name: "${oldName}" → "${name}"${moved ? ` | ${moved} product(s) updated` : ''}`);
+        }
+      } else {
+        const newId = brands.length ? Math.max(...brands.map(b => b.id)) + 1 : 1;
+        brands.push({ id: newId, name });
+        addLog('Added Brand', name, `Brand ID: ${newId}`);
+      }
+      closeBrandModal();
+      renderTables();
+    }
+    function editBrand(id) {
+      const b = brands.find(b => b.id == id);
+      if (!b) return;
+      document.getElementById('brandId').value = b.id;
+      document.getElementById('brandName').value = b.name;
+      document.getElementById('brandModalTitle').innerText = 'Edit Brand';
+      document.getElementById('brandModal').classList.add('show');
+    }
+    function deleteBrand(id) {
+      const b = brands.find(b => b.id == id);
+      if (!b) return;
+      const affected = prods.filter(p => p.brand === b.name);
+      const msg = affected.length
+        ? `Delete brand "${b.name}"?\n${affected.length} product(s) will be tagged "Others".`
+        : `Delete brand "${b.name}"?`;
+      if (confirm(msg)) {
+        brands = brands.filter(x => x.id != id);
+        affected.forEach(p => { p.brand = OTHERS; });
+        addLog('Deleted Brand', b.name, `ID: ${id}${affected.length ? ` | ${affected.length} product(s) set to Others` : ''}`);
+        renderTables();
+      }
+    }
+
+    // Audit Log Helper
+    function addLog(action, productName, details = '') {
+      const now = new Date();
+      const time = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+      logs.push({ time, action, productName, details });
+      renderTables();
+    }
+
+    // ============================================================
+    // PRODUCT CRUD
+    // ============================================================
+    function openProdModal() {
+      document.getElementById('prodId').value = '';
+      document.getElementById('prodName').value = '';
+      const others = getOthersCat();
+      modalSceneIds = others ? [others.id] : (cats[0] ? [cats[0].id] : []);
+      document.getElementById('prodBrand').value = '';
+      document.getElementById('prodDesc').value = '';
+      document.getElementById('prodPrice').value = 'Contact for price';
+      document.getElementById('prodImage').value = '';
+      document.getElementById('prodImageFile').value = '';
+      showPreview('', 'prodImagePreview');
+      document.getElementById('prodApp').value = '';
+      document.getElementById('prodDetails').value = '';
+      document.getElementById('prodIsPopular').checked = false;
+      document.getElementById('prodPopOrder').value = '1';
+      document.getElementById('prodModalTitle').innerText = 'Add Product';
+      renderSceneChips();
+      renderBrandChips();
+      document.getElementById('prodModal').classList.add('show');
+    }
+    function closeProdModal() { document.getElementById('prodModal').classList.remove('show'); }
+
+    function saveProduct() {
+      const id = document.getElementById('prodId').value;
+      const name = document.getElementById('prodName').value.trim();
+      let catIds = [...new Set(modalSceneIds.map(Number).filter(cid => cats.some(c => c.id == cid)))];
+      const brand = normBrand(document.getElementById('prodBrand').value);
+      const desc = document.getElementById('prodDesc').value.trim();
+      const price = document.getElementById('prodPrice').value.trim();
+      const image = document.getElementById('prodImage').value.trim();
+      const app = document.getElementById('prodApp').value.trim();
+      const details = document.getElementById('prodDetails').value.replace(/\r/g, '').trim();
+      const isPopular = document.getElementById('prodIsPopular').checked;
+      const popularOrder = parseInt(document.getElementById('prodPopOrder').value) || 999;
+
+      if(!name) return alert('Product name is required');
+      if (!catIds.length) {
+        const others = getOthersCat();
+        catIds = others ? [others.id] : [];
+      }
+
+      ensureBrand(brand);
+      const catNamesStr = sceneNamesList(catIds);
+
+      const pObj = { 
+        id: id ? parseInt(id) : (prods.length ? Math.max(...prods.map(p=>p.id))+1 : 1), 
+        categoryId: catIds[0] ?? null,
+        categoryIds: catIds,
+        brand, name, description: desc, price, image, application: app, details,
+        isPopular, popularOrder
+      };
+
+      if(id) {
+        const idx = prods.findIndex(p => p.id == id);
+        if(idx > -1) {
+          const old = prods[idx];
+          const diffs = [];
+          const oldSceneIds = resolveSceneIds(old);
+
+          if (old.name !== name) diffs.push(`Name: "${old.name}" → "${name}"`);
+          if (oldSceneIds.join(',') !== catIds.join(',')) diffs.push(`Scenes: "${sceneNamesList(oldSceneIds)}" → "${catNamesStr}"`);
+          if ((old.brand || OTHERS) !== brand) diffs.push(`Brand: "${old.brand || OTHERS}" → "${brand}"`);
+          if ((old.price || '') !== price) diffs.push(`Price: "${old.price || 'None'}" → "${price || 'None'}"`);
+          if ((old.details || '') !== details) diffs.push(`Details updated`);
+          if ((old.description || '') !== desc) diffs.push(`Description updated`);
+          if ((old.application || '') !== app) diffs.push(`Application updated`);
+          if ((old.image || '') !== image) diffs.push(`Image updated`);
+          if (!!old.isPopular !== !!isPopular) diffs.push(`Popular: ${old.isPopular ? 'Yes' : 'No'} → ${isPopular ? 'Yes' : 'No'}`);
+          if ((old.popularOrder || 999) !== popularOrder) diffs.push(`Popular Order: ${old.popularOrder || 999} → ${popularOrder}`);
+
+          prods[idx] = pObj;
+          addLog('Edited Product', name, diffs.length > 0 ? diffs.join('\n') : 'No field changes');
+        }
+      } else {
+        prods.push(pObj);
+        addLog('Added Product', name, `Scenes: ${catNamesStr} | Brand: ${brand} | Price: ${price || 'Contact for price'}`);
+      }
+      closeProdModal();
+      renderTables();
+    }
+
+    function editProd(id) {
+      const p = prods.find(p => p.id == id);
+      if(!p) return;
+      document.getElementById('prodId').value = p.id;
+      document.getElementById('prodName').value = p.name;
+      modalSceneIds = [...resolveSceneIds(p)];
+      document.getElementById('prodBrand').value = p.brand === OTHERS ? '' : p.brand;
+      document.getElementById('prodDesc').value = p.description || '';
+      document.getElementById('prodPrice').value = p.price || '';
+      document.getElementById('prodImage').value = p.image || '';
+      document.getElementById('prodImageFile').value = '';
+      showPreview(p.image, 'prodImagePreview');
+      document.getElementById('prodApp').value = p.application || '';
+      document.getElementById('prodDetails').value = p.details || '';
+      document.getElementById('prodIsPopular').checked = !!p.isPopular;
+      document.getElementById('prodPopOrder').value = p.popularOrder || 1;
+      document.getElementById('prodModalTitle').innerText = 'Edit Product';
+      renderSceneChips();
+      renderBrandChips();
+      document.getElementById('prodModal').classList.add('show');
+    }
+    function deleteProd(id) {
+      const p = prods.find(p => p.id == id);
+      if(confirm('Delete this product?')) {
+        prods = prods.filter(p => p.id != id);
+        if(p) addLog('Deleted Product', p.name, `ID: ${p.id} | Scenes: ${sceneNamesList(resolveSceneIds(p))} | Brand: ${p.brand}`);
+        renderTables();
+      }
+    }
+
+    // Helper to generate data.js content string
+    function generateDataJS() {
+      return `// ============================================================
+// UNITED HARDWARE TRADING - Data Layer
+// CATEGORIES = Scenes (Bathroom, Factory, Stationery, Civil & Structural, Others)
+// Each product has 2 tags: categoryId (scene) + brand ("Others" when empty)
+// ============================================================
+
+const CATEGORIES = ${JSON.stringify(cats, null, 2)};
+
+const PRODUCTS = ${JSON.stringify(prods, null, 2)};
+
+const BRANDS = ${JSON.stringify(brands, null, 2)};
+
+const AUDIT_LOGS = ${JSON.stringify(logs, null, 2)};
+`;
+    }
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const blob = new Blob([generateDataJS()], { type: 'application/javascript' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'data.js';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Excel Export
+    function exportToExcel() {
+      const rows = prods.map(p => {
+        const sids = resolveSceneIds(p);
+        return {
+          ID: p.id,
+          Name: p.name,
+          SceneIDs: sids.join(', '),
+          Scenes: sceneNamesList(sids),
+          Brand: p.brand || OTHERS,
+          Description: p.description || '',
+          Price: p.price || '',
+          Application: p.application || '',
+          Details: p.details || '',
+          IsPopular: p.isPopular ? 'Yes' : 'No',
+          PopularOrder: p.popularOrder || ''
+        };
+      });
+      const ws = XLSX.utils.json_to_sheet(rows);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Products');
+      XLSX.writeFile(wb, 'UHT_Products.xlsx');
+    }
+
+    // Excel Import (supports multi-scene comma-separated Scenes/SceneIDs and legacy Scene/SceneID/CategoryID/Material)
+    function importFromExcel(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const wb = XLSX.read(e.target.result, { type: 'array' });
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(ws);
+          if (!rows.length) return alert('Excel file is empty.');
+
+          let added = 0, updated = 0;
+          rows.forEach(row => {
+            const id = parseInt(row.ID);
+
+            // Resolve scenes (supports comma/semicolon-separated names or IDs)
+            let sceneIds = [];
+            const sceneNamesIn = String(row.Scenes || row.Scene || row.SceneName || '').trim();
+            if (sceneNamesIn) {
+              sceneNamesIn.split(/[,;]+/).map(s => s.trim()).filter(Boolean).forEach(sn => {
+                const found = cats.find(c => c.name.toLowerCase() === sn.toLowerCase());
+                if (found) sceneIds.push(found.id);
+              });
+            }
+            if (!sceneIds.length) {
+              const idsIn = String(row.SceneIDs || row.SceneID || row.CategoryID || '').trim();
+              if (idsIn) {
+                idsIn.split(/[,;]+/).map(s => parseInt(s.trim())).filter(n => !isNaN(n)).forEach(sid => {
+                  if (cats.some(c => c.id === sid)) sceneIds.push(sid);
+                });
+              }
+            }
+            sceneIds = [...new Set(sceneIds)];
+            if (!sceneIds.length) {
+              const others = getOthersCat();
+              sceneIds = others ? [others.id] : [];
+            }
+
+            const brand = normBrand(row.Brand);
+            ensureBrand(brand);
+
+            let details = String(row.Details || '').trim();
+            if (!details && row.Material) details = `Material: ${String(row.Material).trim()}`;
+
+            const pObj = {
+              id: id || (prods.length ? Math.max(...prods.map(p=>p.id))+1 : 1),
+              categoryId: sceneIds[0] ?? null,
+              categoryIds: sceneIds,
+              brand,
+              name: String(row.Name || '').trim(),
+              description: String(row.Description || '').trim(),
+              price: String(row.Price || 'Contact for price').trim(),
+              image: '',
+              application: String(row.Application || '').trim(),
+              details,
+              isPopular: String(row.IsPopular || '').toLowerCase() === 'yes',
+              popularOrder: parseInt(row.PopularOrder) || 999
+            };
+            if (!pObj.name) return;
+
+            const existIdx = prods.findIndex(p => p.id === pObj.id);
+            if (existIdx > -1) {
+              pObj.image = prods[existIdx].image; // keep existing image
+              prods[existIdx] = pObj;
+              updated++;
+            } else {
+              prods.push(pObj);
+              added++;
+            }
+          });
+          addLog('Excel Import', 'Bulk Product Import', `Batch processed file "${file.name}":\nAdded ${added} new product(s)\nUpdated ${updated} existing product(s)`);
+          renderTables();
+          alert(`✅ Import complete! Added: ${added}, Updated: ${updated}`);
+        } catch(err) {
+          alert('❌ Error reading Excel file: ' + err.message);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+      event.target.value = '';
+    }
+
+    // --- GitHub Auto Sync Logic ---
+    function openSyncModal() {
+      document.getElementById('ghUser').value = localStorage.getItem('ghUser') || '';
+      document.getElementById('ghRepo').value = localStorage.getItem('ghRepo') || '';
+      document.getElementById('ghBranch').value = localStorage.getItem('ghBranch') || 'main';
+      document.getElementById('ghToken').value = localStorage.getItem('ghToken') || '';
+      document.getElementById('syncModal').classList.add('show');
+    }
+    function closeSyncModal() { document.getElementById('syncModal').classList.remove('show'); }
+    
+    function saveSyncSettings() {
+      localStorage.setItem('ghUser', document.getElementById('ghUser').value.trim());
+      localStorage.setItem('ghRepo', document.getElementById('ghRepo').value.trim());
+      localStorage.setItem('ghBranch', document.getElementById('ghBranch').value.trim() || 'main');
+      localStorage.setItem('ghToken', document.getElementById('ghToken').value.trim());
+      alert('Settings saved locally.');
+      closeSyncModal();
+    }
+
+    function b64EncodeUnicode(str) {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function toSolidBytes(match, p1) {
+        return String.fromCharCode('0x' + p1);
+      }));
+    }
+
+    async function autoSync() {
+      const ghUser = localStorage.getItem('ghUser');
+      const ghRepo = localStorage.getItem('ghRepo');
+      const ghToken = localStorage.getItem('ghToken');
+      const ghBranch = localStorage.getItem('ghBranch') || 'main';
+
+      if(!ghUser || !ghRepo || !ghToken) {
+        alert("Please configure Sync Settings first.");
+        openSyncModal();
+        return;
+      }
+
+      const autoSyncBtn = document.getElementById('autoSyncBtn');
+      autoSyncBtn.disabled = true;
+      autoSyncBtn.innerText = "⏳ Syncing...";
+
+      const jsContent = generateDataJS();
+
+      const filePath = 'assets/js/data.js';
+      const apiUrl = `https://api.github.com/repos/${ghUser}/${ghRepo}/contents/${filePath}`;
+      
+      try {
+        let sha = '';
+        const getRes = await fetch(apiUrl + `?ref=${ghBranch}`, {
+          headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        
+        if(getRes.ok) {
+          const fileData = await getRes.json();
+          sha = fileData.sha;
+        } else if(getRes.status !== 404) {
+          throw new Error("Failed to get file info. Check your Repo/Branch name and Token.");
+        }
+
+        const putRes = await fetch(apiUrl, {
+          method: 'PUT',
+          headers: { 'Authorization': `token ${ghToken}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: "Auto-sync data.js from Admin Panel",
+            content: b64EncodeUnicode(jsContent),
+            sha: sha || undefined,
+            branch: ghBranch
+          })
+        });
+
+        if(putRes.ok) {
+          alert("✅ Success! Your website is updating in the background. Please wait ~1 minute and refresh your live site.");
+        } else {
+          const errorData = await putRes.json();
+          throw new Error(errorData.message || "Failed to push to GitHub.");
+        }
+
+      } catch (error) {
+        alert("❌ Sync Error: " + error.message);
+      } finally {
+        autoSyncBtn.disabled = false;
+        autoSyncBtn.innerText = "🚀 Auto Sync to Live Site";
+      }
+    }
+
+    renderTables();
+  </script>
+</body>
+</html>
